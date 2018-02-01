@@ -1,0 +1,337 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= styled_flash %>
+  <form class="form-horizontal">
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>View <%= arm_t('model') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @model.name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.zh_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @model.zh_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.en_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @model.en_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.includes_classes' %></label>
+          <% if @model.includes_classes.present? %>
+          <div class="col-sm-9">
+            <% @model.includes_classes.each do |includes_class| %>
+            <span class="btn btn-default"><%= includes_class %></span>
+            <% end %>
+          </div>
+          <% else %>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, 'None', readonly: true, class: 'form-control' %>
+          </div>
+          <% end %>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.extends_classes' %></label>
+          <% if @model.extends_classes.present? %>
+          <div class="col-sm-9">
+            <% @model.extends_classes.each do |extends_class| %>
+            <span class="btn btn-default"><%= extends_class %></span>
+            <% end %>
+          </div>
+          <% else %>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, 'None', readonly: true, class: 'form-control' %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= link_to 'Edit', edit_model_path(@model), class: 'btn btn-default' %>
+      </div>
+    </div>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2><%= arm_t('model') %> <%= ara_t('model.abilities') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.orm_loggable' %></label>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <%= text_field_tag nil, boolean_formatter(@model.orm_loggable.present?), readonly: true, class: 'form-control' %>
+              <span class="input-group-btn">
+                <% if @model.orm_loggable.present? %>
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_orm_loggable_path(@model.orm_loggable), class: 'btn btn-default' %>
+                <%= link_to raw('<i class="fa fa-times"></i>'), @model.orm_loggable, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
+                <% else %>
+                <%= link_to raw('<i class="fa fa-plus"></i>'), new_model_orm_loggable_path(@model), class: 'btn btn-default' %>
+                <% end %>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.authenticatable' %></label>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <%= text_field_tag nil, boolean_formatter(@model.authenticatable.present?), readonly: true, class: 'form-control' %>
+              <span class="input-group-btn">
+                <% if @model.authenticatable.present? %>
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_authenticatable_path(@model.authenticatable), class: 'btn btn-default' %>
+                <%= link_to raw('<i class="fa fa-times"></i>'), @model.authenticatable, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
+                <% else %>
+                <%= link_to raw('<i class="fa fa-plus"></i>'), new_model_authenticatable_path(@model), class: 'btn btn-default' %>
+                <% end %>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.sortable' %></label>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <%= text_field_tag nil, boolean_formatter(@model.sortable.present?), readonly: true, class: 'form-control' %>
+              <span class="input-group-btn">
+                <% if @model.sortable.present? %>
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_sortable_path(@model.sortable), class: 'btn btn-default' %>
+                <%= link_to raw('<i class="fa fa-times"></i>'), @model.sortable, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
+                <% else %>
+                <%= link_to raw('<i class="fa fa-plus"></i>'), new_model_sortable_path(@model), class: 'btn btn-default' %>
+                <% end %>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.trashable' %></label>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <%= text_field_tag nil, boolean_formatter(@model.trashable.present?), readonly: true, class: 'form-control' %>
+              <span class="input-group-btn">
+                <% if @model.trashable.present? %>
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_trashable_path(@model.trashable), class: 'btn btn-default' %>
+                <%= link_to raw('<i class="fa fa-times"></i>'), @model.trashable, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
+                <% else %>
+                <%= link_to raw('<i class="fa fa-plus"></i>'), new_model_trashable_path(@model), class: 'btn btn-default' %>
+                <% end %>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.state_machine' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, boolean_formatter(@model.state_machine.present?), readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2><%= arm_t('cascade') %> List</h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.many_to_one_cascades' %></label>
+          <% if @model.cascades_as_destination.present? %>
+          <div class="col-sm-9">
+            <% @model.cascades_as_destination.each do |cascade| %>
+            <span class="btn btn-default padding-left-10 padding-right-10"><%= cascade.source.en_name %></span>
+            <% end %>
+          </div>
+          <% else %>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, 'None', readonly: true, class: 'form-control' %>
+          </div>
+          <% end %>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.one_to_one_cascades' %></label>
+          <% if @model.cascades_as_source.with_type(:has_one).present? %>
+          <div class="col-sm-9">
+            <% @model.cascades_as_source.with_type(:has_one).each do |cascade| %>
+            <span class="btn btn-default padding-left-10 padding-right-10"><%= cascade.destination.en_name %></span>
+            <% end %>
+          </div>
+          <% else %>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, 'None', readonly: true, class: 'form-control' %>
+          </div>
+          <% end %>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.one_to_many_cascades' %></label>
+          <% if @model.cascades_as_source.with_type(:has_many).present? %>
+          <div class="col-sm-9">
+            <% @model.cascades_as_source.with_type(:has_many).each do |cascade| %>
+            <span class="btn btn-default padding-left-10 padding-right-10"><%= cascade.destination.en_name %></span>
+            <% end %>
+          </div>
+          <% else %>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, 'None', readonly: true, class: 'form-control' %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= link_to 'New', new_model_cascade_path(@model), class: 'btn btn-default' %>
+      </div>
+    </div>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2><%= arm_t('property') %> List</h2>
+        </div>
+      </div>
+      <% if @model.properties.present? %>
+      <div class="table-responsive">
+        <table class="table table-head-light margin-bottom-0">
+          <thead>
+            <tr>
+              <th><%= ara_t 'property.type' %></th>
+              <th><%= ara_t 'property.name' %></th>
+              <th><%= ara_t 'property.i18n_name' %></th>
+              <th><%= ara_t 'property.common_validation' %></th>
+              <th><%= ara_t 'property.validations' %></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @model.properties.order(:position).each do |property| %>
+            <tr>
+              <td><%= property.model_name.human %><br /><%= property.type_text %></td>
+              <td><%= property.name %><br />#<%= property.position %></td>
+              <td><%= property.zh_name %><br /><%= property.en_name %></td>
+              <td>
+                <% case property.common_validation.empty_tolerance %>
+                <% when 'none' %>
+                <%= 'No Empty' %>
+                <% when 'null' %>
+                <%= 'Allow nil' %>
+                <% when 'blank' %>
+                <%= 'Allow blank' %>
+                <% end %><br />
+                <% case property.common_validation.on_actions %>
+                <% when 'all' %>
+                <%= 'Create & Update' %>
+                <% when 'create' %>
+                <%= 'Only Create' %>
+                <% when 'update' %>
+                <%= 'Only Update' %>
+                <% end %>
+              </td>
+              <td>
+                <% %w(acceptance confirmation exclusion format inclusion length numericality presence absence uniqueness).each do |validation_name| %>
+                <% if property.send("#{validation_name}_validation").present? %>
+                <span class="btn btn-default padding-left-10 padding-right-10"><%= t("abbreviation.#{validation_name}_validation") %></span>
+                <% end %>
+                <% end %>
+                <%= link_to raw('<i class="fa fa-plus"></i>'), 'javascript:;', data: { toggle: 'modal', target: "#modal-property-#{property.id}-new-validation" }, class: 'btn btn-default btn-icon' %>
+              </td>
+              <td class="actions">
+                <% case property %>
+                <% when RegularProperty %>
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_regular_property_path(property), class: 'btn btn-default btn-icon' %>
+                <% when HashProperty %>
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_hash_property_path(property), class: 'btn btn-default btn-icon' %>
+                <% when EnumerationProperty %>
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_enumeration_property_path(property), class: 'btn btn-default btn-icon' %>
+                <% when FileProperty %>
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_file_property_path(property), class: 'btn btn-default btn-icon' %>
+                <% end %>
+                <%= link_to raw('<i class="fa fa-times"></i>'), property_path(property), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-icon' %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% end %>
+      <div class="block-footer">
+        <div class="btn-group dropup">
+          <button type="button" class="btn btn-default">New</button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'String', new_model_regular_property_path(@model, type: :string) %></li>
+            <li><%= link_to 'Text', new_model_regular_property_path(@model, type: :text) %></li>
+            <li><%= link_to 'Integer', new_model_regular_property_path(@model, type: :integer) %></li>
+            <li><%= link_to 'Float', new_model_regular_property_path(@model, type: :float) %></li>
+            <li><%= link_to 'Decimal', new_model_regular_property_path(@model, type: :decimal) %></li>
+            <li><%= link_to 'Date', new_model_regular_property_path(@model, type: :date) %></li>
+            <li><%= link_to 'Time', new_model_regular_property_path(@model, type: :time) %></li>
+            <li><%= link_to 'Datetime', new_model_regular_property_path(@model, type: :datetime) %></li>
+            <li><%= link_to 'Boolean', new_model_regular_property_path(@model, type: :boolean) %></li>
+            <li><%= link_to 'Array', new_model_regular_property_path(@model, type: :array) %></li>
+            <li role="separator" class="divider">
+            <li><%= link_to 'Hash', new_model_hash_property_path(@model) %></li>
+            <li><%= link_to 'Enumeration', new_model_enumeration_property_path(@model) %></li>
+            <li><%= link_to 'File', new_model_file_property_path(@model) %></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<% @model.properties.each do |property| %>
+<% %w(acceptance confirmation exclusion format inclusion length numericality presence absence uniqueness).map{|validation_name| property.send("#{validation_name}_validation")}.compact.each do |validation| %>
+<div class="modal fade" id="<%= "modal-property-#{property.id}-#{validation.class.name}-validation-#{}" %>" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="icon-cross"></span></button>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">View Validation</h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<div class="modal fade" id="<%= "modal-property-#{property.id}-new-validation" %>" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="icon-cross"></span></button>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">New Validation</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <% %w(acceptance confirmation exclusion format inclusion length numericality presence absence uniqueness).each do |validation_name| %>
+          <div class="col-md-4 margin-bottom-10">
+            <% if property.send("#{validation_name}_validation").present? %>
+            <button type="button" class="btn btn-default btn-icon-fixed btn-block" disabled><span class="<%= Object.const_get("#{validation_name.capitalize}Validation").icon %>"></span> <%= validation_name.capitalize %></button>
+            <% else %>
+            <%= link_to raw("<span class=\"#{Object.const_get("#{validation_name.capitalize}Validation").icon}\"></span> #{validation_name.capitalize}"), "/properties/#{property.id}/#{validation_name}_validations/new", class: 'btn btn-default btn-icon-fixed btn-block' %>
+            <% end %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

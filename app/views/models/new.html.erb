@@ -1,0 +1,53 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @model %>
+  <%= form_for @model, html: { class: 'form-horizontal' } do |f| %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('model') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.zh_name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :zh_name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.en_name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :en_name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.includes_classes' %></label>
+          <div class="col-sm-6">
+            <%= f.text_field :includes_classes, value: @model.includes_classes.join(','), data: { role: 'tagsinput' }, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.extends_classes' %></label>
+          <div class="col-sm-6">
+            <%= f.text_field :extends_classes, value: @model.extends_classes.join(','),data: { role: 'tagsinput' }, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Create', class: 'btn btn-primary' %>
+      </div>
+    </div>
+  <% end %>
+</div>

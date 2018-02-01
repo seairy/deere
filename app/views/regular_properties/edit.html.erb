@@ -1,0 +1,61 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @property %>
+  <%= form_for @property, url: regular_property_path(@property), html: { class: 'form-horizontal' } do |f| %>
+    <%= f.hidden_field :type, value: @property.type %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>Edit <%= arm_t('regular_property') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.model_en_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @property.model.en_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.type' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @property.type_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.zh_name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :zh_name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.en_name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :en_name, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-divider-text"><%= arm_t('common_validation') %></div>
+      <div class="block-content">
+        <%= f.fields_for :common_validation, @property.common_validation do |field| %>
+          <%= render 'common_validations/form', field: field %>
+        <% end %>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Update', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @property.model, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Deere | Login</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <meta name="description" content="北京中道康达科技发展有限公司">
+    <%= stylesheet_link_tag 'boooya', media: 'all', 'data-turbolinks-track': 'reload' %>
+  </head>
+  <body>
+    <div class="app">
+      <div class="app-container">
+        <div class="app-login-box">
+          <div class="app-login-box-user"><%= image_tag 'logo-icon.png' %></div>
+          <div class="app-login-box-title">
+            <div class="title">Deere</div>
+            <div class="subtitle">Mocadorà</div>
+          </div>
+          <div class="app-login-box-container">
+            <%= form_tag sign_in_path, method: :post do %>
+              <div class="form-group">
+                <%= collection_select :project, :id, Project.all, :id, :name, { prompt: '<Select Proejct>' }, class: 'form-control s2-select' %>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-success btn-block">Enter</button>
+              </div>
+            <% end %>
+          </div>
+          <div class="app-login-box-or"><div class="or">OR</div></div>
+          <div class="app-login-box-container">
+            <%= link_to 'New Project', new_project_path, class: 'btn btn-info btn-block' %>
+          </div>
+          <div class="app-login-box-footer">
+            © Deere 2016 - 2018. All rights reserved.
+          </div>
+        </div>
+      </div>
+    </div>
+    <%= javascript_include_tag 'boooya', 'data-turbolinks-track': 'reload' %>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<div class="form-group">
+  <label class="col-sm-3 control-label"><%= ara_t 'common_validation.empty_tolerance' %> <span class="required">*</span></label>
+  <div class="col-sm-6">
+    <div class="app-radio inline round">
+      <label><%= field.radio_button :empty_tolerance, :none, checked: (@property.common_validation.new_record? or @property.common_validation.empty_tolerance_none?) %> None</label>
+    </div>
+    <div class="app-radio inline round">
+      <label><%= field.radio_button :empty_tolerance, :null %> NULL</label>
+    </div>
+    <div class="app-radio inline round">
+      <label><%= field.radio_button :empty_tolerance, :blank %> Blank</label>
+    </div>
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-sm-3 control-label"><%= ara_t 'common_validation.on_actions' %> <span class="required">*</span></label>
+  <div class="col-sm-6">
+    <div class="app-radio inline round">
+      <label><%= field.radio_button :on_actions, :all %> All</label>
+    </div>
+    <div class="app-radio inline round">
+      <label><%= field.radio_button :on_actions, :create %> Create</label>
+    </div>
+    <div class="app-radio inline round">
+      <label><%= field.radio_button :on_actions, :update %> Update</label>
+    </div>
+  </div>
+</div>

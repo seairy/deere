@@ -1,0 +1,34 @@
+//= require boooya/jquery
+//= require boooya/jquery-migrate
+//= require boooya/jquery-ujs
+//= require boooya/jquery-ui
+//= require boooya/bootstrap
+//= require boooya/moment
+//= require boooya/moment-locale
+//= require boooya/jquery-custom-content-scroller
+
+//= require boooya/select2
+//= require boooya/jquery-mask
+//= require boooya/jquery-smart-wizard
+//= require boooya/jquery-form-validator
+//= require boooya/jquery-multi-select
+//= require boooya/jquery-nestable
+//= require boooya/jquery-sparkline
+//= require boooya/jquery-knob
+//= require boooya/bootstrap-datetimepicker
+//= require boooya/bootstrap-editable
+//= require boooya/bootstrap-tour
+//= require boooya/bootstrap-tagsinput
+//= require boooya/sweetalert
+//= require boooya/d3
+//= require boooya/rickshaw
+//= require boooya/decimal
+//= require boooya/chart
+//= require boooya/isotope.pkgd
+//= require boooya/codemirror
+//= require boooya/codemirror/htmlmixed
+//= require boooya/clipboard
+
+//= require boooya/theme
+//= require boooya/theme-plugins
+//= require boooya/theme-custom

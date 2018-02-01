@@ -1,0 +1,74 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @orm_loggable %>
+  <%= form_for [@model, @orm_loggable], html: { class: 'form-horizontal' } do |f| %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('orm_loggable') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'orm_loggable.model_en_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @model.en_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'orm_loggable.on_create' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :on_create, true, checked: true %> Yes</label>
+            </div>
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :on_create, false %> No</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'orm_loggable.on_update' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :on_update, true, checked: true %> Yes</label>
+            </div>
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :on_update, false %> No</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'orm_loggable.on_destroy' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :on_destroy, true, checked: true %> Yes</label>
+            </div>
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :on_destroy, false %> No</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'orm_loggable.comment_required' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :comment_required, true %> Yes</label>
+            </div>
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :comment_required, false, checked: true %> No</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Create', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @model, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

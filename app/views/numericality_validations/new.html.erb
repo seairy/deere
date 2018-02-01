@@ -1,0 +1,66 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @numericality_validation %>
+  <%= form_for [@property, @numericality_validation], url: property_numericality_validations_path(@property, @numericality_validation), html: { class: 'form-horizontal' } do |f| %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('numericality_validation') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'numericality_validation.property_en_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @property.en_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'numericality_validation.range' %></label>
+          <div class="col-sm-3">
+            <div class="input-group">
+              <span class="input-group-addon">MIN</span>
+              <%= f.text_field :minimum, class: 'form-control' %>
+              <div class="input-group-addon">
+                <div class="app-checkbox">
+                  <label><%= f.check_box :includes_minimum %></label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="input-group">
+              <span class="input-group-addon">MAX</span>
+              <%= f.text_field :maximum, class: 'form-control' %>
+              <div class="input-group-addon">
+                <div class="app-checkbox">
+                  <label><%= f.check_box :includes_maximum %></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'numericality_validation.only_integer' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :only_integer, true %> Yes</label>
+            </div>
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :only_integer, false, checked: true %> No</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Create', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @property.model, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

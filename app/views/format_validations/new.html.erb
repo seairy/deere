@@ -1,0 +1,98 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @format_validation %>
+  <%= form_for [@property, @format_validation], url: property_format_validations_path(@property, @format_validation), html: { class: 'form-horizontal' } do |f| %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('format_validation') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'format_validation.property_en_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @property.en_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'format_validation.regular_expression' %></label>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-addon">/</span>
+              <%= f.text_field :regular_expression, class: 'form-control' %>
+              <span class="input-group-addon">/</span>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <span class="help-block"><%= link_to 'Regular expression editor', 'http://rubular.com/', target: '_blank' %></span>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Create', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @property.model, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+  <div class="block block-condensed">
+    <div class="app-heading app-heading-small">
+      <div class="title">
+        <h2>Regex Quick Reference</h2>
+      </div>
+    </div>
+    <div class="block-content">
+      <div class="row">
+        <div class="col-md-4">
+          <ul>
+            <li>/./ - Any character except a newline.</li>
+            <li>/./m - Any character (the m modifier enables multiline mode)</li>
+            <li>/\w/ - A word character ([a-zA-Z0-9_])</li>
+            <li>/\W/ - A non-word character ([^a-zA-Z0-9_]). Please take a look at Bug #4044 if using</li>
+            <li>/\W/ with the /i modifier.</li>
+            <li>/\d/ - A digit character ([0-9])</li>
+            <li>/\D/ - A non-digit character ([^0-9])</li>
+            <li>/\h/ - A hexdigit character ([0-9a-fA-F])</li>
+            <li>/\H/ - A non-hexdigit character ([^0-9a-fA-F])</li>
+            <li>/\s/ - A whitespace character: /[ \t\r\n\f]/</li>
+            <li>/\S/ - A non-whitespace character: /[^ \t\r\n\f]/</li>
+          </ul>
+        </div>
+        <div class="col-md-5">
+          <ul>
+            <li>/[[:alnum:]]/ - Alphabetic and numeric character</li>
+            <li>/[[:alpha:]]/ - Alphabetic character</li>
+            <li>/[[:blank:]]/ - Space or tab</li>
+            <li>/[[:cntrl:]]/ - Control character</li>
+            <li>/[[:digit:]]/ - Digit</li>
+            <li>/[[:graph:]]/ - Non-blank character (excludes spaces, control characters, and similar)</li>
+            <li>/[[:lower:]]/ - Lowercase alphabetical character</li>
+            <li>/[[:print:]]/ - Like [:graph:], but includes the space character</li>
+            <li>/[[:punct:]]/ - Punctuation character</li>
+            <li>/[[:space:]]/ - Whitespace character ([:blank:], newline, carriage return, etc.)</li>
+            <li>/[[:upper:]]/ - Uppercase alphabetical</li>
+            <li>/[[:xdigit:]]/ - Digit allowed in a hexadecimal number (i.e., 0-9a-fA-F)</li>
+            <li>/[[:word:]]/ - A character in one of the following Unicode general categories Letter, Mark, Number, Connector_Punctuation</li>
+            <li>/[[:ascii:]]/ - A character in the ASCII character set</li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <ul>
+            <li>* - Zero or more times</li>
+            <li>+ - One or more times</li>
+            <li>? - Zero or one times (optional)</li>
+            <li>{n} - Exactly n times</li>
+            <li>{n,} - n or more times</li>
+            <li>{,m} - m or less times</li>
+            <li>{n,m} - At least n and at most m times</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

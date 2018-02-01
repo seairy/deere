@@ -1,0 +1,43 @@
+.app .app-header .app-header-search:after {
+  content: "\e922";
+}
+
+.form-control[multiple] {
+  padding: 5px 10px;
+}
+
+table .actions {
+  text-align: right;
+}
+
+form span.required {
+  color: #ed145b;
+}
+
+.app .app-widget-tile .subtitle, .app .app-widget-tile .title {
+  font-size: 13px;
+}
+
+.app .table-center tr td, .app .table-center tr th {
+  text-align: center;
+}
+
+.app .table-senior tr td {
+  font-size: 13px;
+}
+
+.text-no-break-out {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.weather-icon {
+  margin-top: 20px;
+}

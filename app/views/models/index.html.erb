@@ -1,0 +1,28 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+  <div class="heading-elements">
+    <%= link_to raw('<span class="icon-file-add"></span> New'), new_model_path, target: '_blank', class: 'btn btn-default btn-icon-fixed' %>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <% @models.each do |model| %>
+    <div class="col-md-3">
+      <div class="tile-basic tile-basic-bordered">
+        <div class="tile-content">
+          <h3 class="tile-title"><%= link_to model.name.camelize, model, target: '_blank' %></h3>
+          <span class="tile-subtitle padding-bottom-10">R<%= model.regular_properties.length %> / E<%= model.enumeration_properties.length %> / F<%= model.file_properties.length %></span>
+          <div class="app-widget-button app-widget-button-ghost app-widget-button-<%= model.orm_loggable.present? ? 'success' : 'default' %>"><span class="icon-document"></span></div>&nbsp;
+          <div class="app-widget-button app-widget-button-ghost app-widget-button-<%= model.authenticatable.present? ? 'success' : 'default' %>"><span class="icon-lock"></span></div>&nbsp;
+          <div class="app-widget-button app-widget-button-ghost app-widget-button-<%= model.sortable.present? ? 'success' : 'default' %>"><span class="icon-sort-amount-asc"></span></div>&nbsp;
+          <div class="app-widget-button app-widget-button-ghost app-widget-button-<%= model.trashable.present? ? 'success' : 'default' %>"><span class="icon-trash2"></span></div>&nbsp;
+          <div class="app-widget-button app-widget-button-ghost app-widget-button-<%= model.state_machine.present? ? 'success' : 'default' %>"><span class="icon-recycle"></span></div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
