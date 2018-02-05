@@ -1,6 +1,9 @@
 class AcceptanceValidationsController < ApplicationController
-  before_action :find_acceptance_validation, only: %w(edit update destroy)
+  before_action :find_acceptance_validation, only: %w(show edit update destroy)
   before_action :find_property, only: %w(new create)
+
+  def show
+  end
 
   def new
     @acceptance_validation = @property.build_acceptance_validation

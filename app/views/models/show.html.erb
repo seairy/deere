@@ -195,7 +195,16 @@
         </div>
       </div>
       <div class="block-footer">
-        <%= link_to 'New', new_model_cascade_path(@model), class: 'btn btn-default' %>
+        <div class="btn-group dropup">
+          <button type="button" class="btn btn-default">New</button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><%= link_to 'As source', as_source_new_model_cascade_path(@model) %></li>
+            <li><%= link_to 'As destination', as_destination_new_model_cascade_path(@model) %></li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="block block-condensed">
@@ -203,8 +212,11 @@
         <div class="title">
           <h2><%= arm_t('property') %> List</h2>
         </div>
+        <div class="heading-elements">
+          <%= link_to 'Sort', sort_model_properties_path(@model), class: 'btn btn-default' %>
+        </div>
       </div>
-      <% if @model.properties.present? %>
+      <% if @properties.present? %>
       <div class="table-responsive">
         <table class="table table-head-light margin-bottom-0">
           <thead>
@@ -218,15 +230,15 @@
             </tr>
           </thead>
           <tbody>
-            <% @model.properties.order(:position).each do |property| %>
+            <% @properties.order(:position).each do |property| %>
             <tr>
               <td><%= property.model_name.human %><br /><%= property.type_text %></td>
               <td><%= property.name %><br />#<%= property.position %></td>
               <td><%= property.zh_name %><br /><%= property.en_name %></td>
               <td>
                 <% case property.common_validation.empty_tolerance %>
-                <% when 'none' %>
-                <%= 'No Empty' %>
+                <% when 'not_allowed' %>
+                <%= 'Empty not allowed' %>
                 <% when 'null' %>
                 <%= 'Allow nil' %>
                 <% when 'blank' %>
@@ -243,11 +255,17 @@
               </td>
               <td>
                 <% %w(acceptance confirmation exclusion format inclusion length numericality presence absence uniqueness).each do |validation_name| %>
-                <% if property.send("#{validation_name}_validation").present? %>
-                <span class="btn btn-default padding-left-10 padding-right-10"><%= t("abbreviation.#{validation_name}_validation") %></span>
+                <% if (validation = property.send("#{validation_name}_validation")).present? %>
+                  <% if validation.respond_to?(:summary) and validation.summary.present? %>
+                  <%= link_to t("abbreviation.#{validation_name}_validation"), "/#{validation_name}_validations/#{validation.id}", data: { placement: 'top', container: 'body', trigger: 'click', content: validation.summary }, class: 'btn btn-default padding-left-10 padding-right-10 popover-hover' %>
+                  <% else %>
+                  <%= link_to t("abbreviation.#{validation_name}_validation"), "/#{validation_name}_validations/#{validation.id}", class: 'btn btn-default padding-left-10 padding-right-10' %>
+                  <% end %>
                 <% end %>
                 <% end %>
+                <% if %w(acceptance confirmation exclusion format inclusion length numericality presence absence uniqueness).any?{|validation_name| property.send("#{validation_name}_validation").blank?} %>
                 <%= link_to raw('<i class="fa fa-plus"></i>'), 'javascript:;', data: { toggle: 'modal', target: "#modal-property-#{property.id}-new-validation" }, class: 'btn btn-default btn-icon' %>
+                <% end %>
               </td>
               <td class="actions">
                 <% case property %>
@@ -295,22 +313,7 @@
     </div>
   </form>
 </div>
-<% @model.properties.each do |property| %>
-<% %w(acceptance confirmation exclusion format inclusion length numericality presence absence uniqueness).map{|validation_name| property.send("#{validation_name}_validation")}.compact.each do |validation| %>
-<div class="modal fade" id="<%= "modal-property-#{property.id}-#{validation.class.name}-validation-#{}" %>" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="icon-cross"></span></button>
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">View Validation</h4>
-      </div>
-      <div class="modal-body">
-        
-      </div>
-    </div>
-  </div>
-</div>
-<% end %>
+<% @properties.each do |property| %>
 <div class="modal fade" id="<%= "modal-property-#{property.id}-new-validation" %>" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="icon-cross"></span></button>
@@ -325,7 +328,11 @@
             <% if property.send("#{validation_name}_validation").present? %>
             <button type="button" class="btn btn-default btn-icon-fixed btn-block" disabled><span class="<%= Object.const_get("#{validation_name.capitalize}Validation").icon %>"></span> <%= validation_name.capitalize %></button>
             <% else %>
+            <% if %w(presence absence).include?(validation_name) %>
+            <%= link_to raw("<span class=\"#{Object.const_get("#{validation_name.capitalize}Validation").icon}\"></span> #{validation_name.capitalize}"), "/properties/#{property.id}/#{validation_name}_validations", method: :post, class: 'btn btn-default btn-icon-fixed btn-block' %>
+            <% else %>
             <%= link_to raw("<span class=\"#{Object.const_get("#{validation_name.capitalize}Validation").icon}\"></span> #{validation_name.capitalize}"), "/properties/#{property.id}/#{validation_name}_validations/new", class: 'btn btn-default btn-icon-fixed btn-block' %>
+            <% end %>
             <% end %>
           </div>
           <% end %>

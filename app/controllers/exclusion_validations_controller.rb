@@ -1,7 +1,10 @@
 class ExclusionValidationsController < ApplicationController
-  before_action :find_exclusion_validation, only: %w(edit update destroy)
+  before_action :find_exclusion_validation, only: %w(show edit update destroy)
   before_action :find_property, only: %w(new create)
   before_action :format_array_attributes, only: %w(create update)
+
+  def show
+  end
 
   def new
     @exclusion_validation = @property.build_exclusion_validation

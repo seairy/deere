@@ -8,6 +8,7 @@ class ModelsController < ApplicationController
   end
   
   def show
+    @properties = @model.properties.includes(:common_validation, :acceptance_validation, :confirmation_validation, :exclusion_validation, :format_validation, :inclusion_validation, :length_validation, :numericality_validation, :presence_validation, :absence_validation, :uniqueness_validation)
   end
   
   def new

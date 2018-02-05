@@ -1,45 +1,21 @@
 # -*- encoding : utf-8 -*-
 class PropertiesController < ApplicationController
-  before_action :find_property, only: %w(show edit update destroy)
-  before_action :find_model, only: %w(new create)
-  
-  def show
-  end
-  
-  def new
-    @property = @model.properties.new
-  end
-  
-  def edit
-  end
-  
-  def create
-    @property = @model.properties.new(property_params)
-    if @property.save
-      redirect_to @property, notice: notice_sentence
-    else
-      render action: 'new'
-    end
-  end
-  
-  def update
-    if @property.update(property_params)
-      redirect_to @property, notice: notice_sentence
-    else
-      render action: 'edit'
-    end
-  end
+  before_action :find_property, only: %w(destroy)
+  before_action :find_model, only: %w(new create sort)
 
   def destroy
     @property.destroy!
-    redirect_to properties_path, notice: notice_sentence
+    redirect_to @property.model, notice: notice_sentence
+  end
+
+  def sort
+    if request.patch?
+      Property.sort(params[:property_ids])
+      head 200
+    end
   end
 
   protected
-    def property_params
-      params.require(:property).permit!
-    end
-
     def find_property
       @property = Property.find(params[:id])
     end

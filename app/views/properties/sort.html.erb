@@ -1,0 +1,43 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <div class="block block-condensed">
+    <div class="app-heading">
+      <div class="title">
+        <h2>Sort <%= arm_t('property') %></h2>
+      </div>
+    </div>
+    <div class="block-content">
+      <div class="dd" id="nestable">
+        <ol class="dd-list">
+          <% @model.properties.order(:position).each do |property| %>
+          <li class="dd-item" data-id="<%= property.id %>">
+            <div class="dd-handle"><i class="fa fa-circle text-danger margin-right-20"></i> <%= property.zh_name %> / <%= property.en_name %></div>
+          </li>
+          <% end %>
+        </ol>
+      </div>
+    </div>
+    <div class="block-footer">
+      <%= link_to 'Finish', @model, class: 'btn btn-default' %>
+    </div>
+  </div>
+</div>
+<% content_for :javascript do %>
+  <script>
+    jQuery(document).ready(function() {
+      $("#nestable").nestable().on('change', function() {
+        sorted_ids = $('#nestable').nestable('serialize').map(function(item, i) { return item.id }).join()
+        $.ajax({
+          url: '/models/<%= @model.id %>/properties/sort',
+          method: 'PATCH',
+          data: { property_ids: sorted_ids }
+        });
+      });
+    });
+  </script>
+<% end %>

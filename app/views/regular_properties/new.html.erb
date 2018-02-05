@@ -46,9 +46,9 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'property.after' %> <span class="required">*</span></label>
+          <label class="col-sm-3 control-label"><%= ara_t 'property.before' %> <span class="required">*</span></label>
           <div class="col-sm-6">
-            <%= f.select :after_property_id, [['#1 ID', 0]] + @model.properties.order(:position).map.each_with_index{|property, i| ["##{i + 2} #{property.en_name}", property.id] unless property.new_record?}.compact, { selected: @property.after_property_id || @model.properties.order(:position).last.try(:id)}, class: 'form-control s2-select' %>
+            <%= f.select :before_property_id, @model.properties.order(:position).map.each_with_index{|property, i| ["##{i + 1} #{property.en_name}", property.id] unless property.new_record?}.compact + [['End', 0]], { selected: @property.before_property_id || '0'}, class: 'form-control s2-select' %>
           </div>
         </div>
       </div>

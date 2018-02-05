@@ -21,6 +21,12 @@ class Property < ApplicationRecord
   validates :en_name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :model }
   validates :common_validation, presence: true
 
+  def self.sort sequence
+    sequence.split(',').each_with_index do |id, index|
+      position = index + 1
+      find(id).update!(position: position)
+    end
+  end
 
   protected
     def set_position

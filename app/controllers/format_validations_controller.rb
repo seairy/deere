@@ -1,6 +1,9 @@
 class FormatValidationsController < ApplicationController
-  before_action :find_format_validation, only: %w(edit update destroy)
+  before_action :find_format_validation, only: %w(show edit update destroy)
   before_action :find_property, only: %w(new create)
+
+  def show
+  end
 
   def new
     @format_validation = @property.build_format_validation

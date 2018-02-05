@@ -18,4 +18,8 @@ class Model < ApplicationRecord
   validates :name, presence: true, length: { maximum: 100 }, format: /\A\w+\Z/
   validates :zh_name, presence: true, length: { maximum: 100 }
   validates :en_name, presence: true, length: { maximum: 100 }
+
+  def cascades_ids
+    [id, cascades_as_source.pluck(:destination_id), cascades_as_destination.pluck(:source_id)].flatten.compact
+  end
 end

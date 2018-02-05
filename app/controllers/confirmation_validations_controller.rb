@@ -1,6 +1,9 @@
 class ConfirmationValidationsController < ApplicationController
-  before_action :find_confirmation_validation, only: %w(edit update destroy)
+  before_action :find_confirmation_validation, only: %w(show edit update destroy)
   before_action :find_property, only: %w(new create)
+
+  def show
+  end
 
   def new
     @confirmation_validation = @property.build_confirmation_validation

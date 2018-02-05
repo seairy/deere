@@ -5,32 +5,33 @@
   </div>
 </div>
 <div class="container">
-  <%= render "common/error_messages", target: @acceptance_validation %>
-  <%= form_for [@property, @acceptance_validation], url: property_acceptance_validations_path(@property, @acceptance_validation), html: { class: 'form-horizontal' } do |f| %>
+  <%= styled_flash %>
+  <form class="form-horizontal">
     <div class="block block-condensed">
       <div class="app-heading app-heading-small">
         <div class="title">
-          <h2>New <%= arm_t('acceptance_validation') %></h2>
+          <h2>View <%= arm_t('acceptance_validation') %></h2>
         </div>
       </div>
       <div class="block-content">
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'acceptance_validation.property' %></label>
           <div class="col-sm-6">
-            <%= text_field_tag nil, @property.en_name, readonly: true, class: 'form-control' %>
+            <%= text_field_tag nil, @acceptance_validation.property.en_name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'acceptance_validation.accept' %></label>
           <div class="col-sm-6">
-            <%= f.text_field :accept, class: 'form-control' %>
+            <%= text_field_tag nil, @acceptance_validation.accept, readonly: true, class: 'form-control' %>
           </div>
         </div>
       </div>
       <div class="block-footer">
-        <%= f.submit 'Create', class: 'btn btn-primary' %>
-        <%= link_to 'Return', @property.model, class: 'pull-right btn btn-default' %>
+        <%= link_to 'Edit', edit_acceptance_validation_path(@acceptance_validation), class: 'btn btn-primary' %>
+        <%= link_to 'Destroy', @acceptance_validation, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <%= link_to 'Return', @acceptance_validation.property.model, class: 'pull-right btn btn-default' %>
       </div>
     </div>
-  <% end %>
+  </form>
 </div>

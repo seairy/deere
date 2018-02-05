@@ -1,6 +1,9 @@
 class NumericalityValidationsController < ApplicationController
-  before_action :find_numericality_validation, only: %w(edit update destroy)
+  before_action :find_numericality_validation, only: %w(show edit update destroy)
   before_action :find_property, only: %w(new create)
+
+  def show
+  end
 
   def new
     @numericality_validation = @property.build_numericality_validation

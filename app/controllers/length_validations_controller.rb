@@ -1,6 +1,9 @@
 class LengthValidationsController < ApplicationController
-  before_action :find_length_validation, only: %w(edit update destroy)
+  before_action :find_length_validation, only: %w(show edit update destroy)
   before_action :find_property, only: %w(new create)
+
+  def show
+  end
 
   def new
     @length_validation = @property.build_length_validation

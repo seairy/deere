@@ -16,7 +16,7 @@
   <label class="col-sm-3 control-label"><%= ara_t 'common_validation.on_actions' %> <span class="required">*</span></label>
   <div class="col-sm-6">
     <div class="app-radio inline round">
-      <label><%= field.radio_button :on_actions, :all %> All</label>
+      <label><%= field.radio_button :on_actions, :all, checked: (@property.common_validation.new_record? or @property.common_validation.on_actions_all?) %> All</label>
     </div>
     <div class="app-radio inline round">
       <label><%= field.radio_button :on_actions, :create %> Create</label>

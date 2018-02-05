@@ -6,30 +6,30 @@
 </div>
 <div class="container">
   <%= render "common/error_messages", target: @inclusion_validation %>
-  <%= form_for [@property, @inclusion_validation], url: property_inclusion_validations_path(@property, @inclusion_validation), html: { class: 'form-horizontal' } do |f| %>
+  <%= form_for @inclusion_validation, html: { class: 'form-horizontal' } do |f| %>
     <div class="block block-condensed">
       <div class="app-heading app-heading-small">
         <div class="title">
-          <h2>New <%= arm_t('inclusion_validation') %></h2>
+          <h2>Edit <%= arm_t('inclusion_validation') %></h2>
         </div>
       </div>
       <div class="block-content">
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'inclusion_validation.property' %></label>
           <div class="col-sm-6">
-            <%= text_field_tag nil, @property.en_name, readonly: true, class: 'form-control' %>
+            <%= text_field_tag nil, @inclusion_validation.property.en_name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'inclusion_validation.values' %> <span class="required">*</span></label>
           <div class="col-sm-6">
-            <%= f.text_field :values, data: { role: 'tagsinput' }, class: 'form-control' %>
+            <%= f.text_field :values, value: @inclusion_validation.values.join(','), data: { role: 'tagsinput' }, class: 'form-control' %>
           </div>
         </div>
       </div>
       <div class="block-footer">
-        <%= f.submit 'Create', class: 'btn btn-primary' %>
-        <%= link_to 'Return', @property.model, class: 'pull-right btn btn-default' %>
+        <%= f.submit 'Update', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @inclusion_validation.property.model, class: 'pull-right btn btn-default' %>
       </div>
     </div>
   <% end %>

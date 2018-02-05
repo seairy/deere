@@ -5,41 +5,42 @@
   </div>
 </div>
 <div class="container">
-  <%= render "common/error_messages", target: @length_validation %>
-  <%= form_for [@property, @length_validation], url: property_length_validations_path(@property, @length_validation), html: { class: 'form-horizontal' } do |f| %>
+  <%= styled_flash %>
+  <form class="form-horizontal">
     <div class="block block-condensed">
       <div class="app-heading app-heading-small">
         <div class="title">
-          <h2>New <%= arm_t('length_validation') %></h2>
+          <h2>View <%= arm_t('length_validation') %></h2>
         </div>
       </div>
       <div class="block-content">
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'length_validation.property' %></label>
           <div class="col-sm-6">
-            <%= text_field_tag nil, @property.en_name, readonly: true, class: 'form-control' %>
+            <%= text_field_tag nil, @length_validation.property.en_name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'length_validation.range' %> <span class="required">*</span></label>
+          <label class="col-sm-3 control-label"><%= ara_t 'length_validation.range' %></label>
           <div class="col-sm-3">
             <div class="input-group">
               <span class="input-group-addon">MIN</span>
-              <%= f.text_field :minimum, class: 'form-control' %>
+              <%= text_field_tag nil, @length_validation.minimum, readonly: true, class: 'form-control' %>
             </div>
           </div>
           <div class="col-sm-3">
             <div class="input-group">
               <span class="input-group-addon">MAX</span>
-              <%= f.text_field :maximum, class: 'form-control' %>
+              <%= text_field_tag nil, @length_validation.maximum, readonly: true, class: 'form-control' %>
             </div>
           </div>
         </div>
       </div>
       <div class="block-footer">
-        <%= f.submit 'Create', class: 'btn btn-primary' %>
-        <%= link_to 'Return', @property.model, class: 'pull-right btn btn-default' %>
+        <%= link_to 'Edit', edit_length_validation_path(@length_validation), class: 'btn btn-primary' %>
+        <%= link_to 'Destroy', @length_validation, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <%= link_to 'Return', @length_validation.property.model, class: 'pull-right btn btn-default' %>
       </div>
     </div>
-  <% end %>
+  </form>
 </div>

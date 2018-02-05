@@ -1,7 +1,10 @@
 class UniquenessValidationsController < ApplicationController
-  before_action :find_uniqueness_validation, only: %w(edit update destroy)
+  before_action :find_uniqueness_validation, only: %w(show edit update destroy)
   before_action :find_property, only: %w(new create)
   before_action :format_array_attributes, only: %w(create update)
+
+  def show
+  end
 
   def new
     @uniqueness_validation = @property.build_uniqueness_validation

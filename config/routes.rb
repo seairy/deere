@@ -2,7 +2,17 @@ Rails.application.routes.draw do
   root to: 'dashboard#index'
   get :dashboard, to: 'dashboard#index', as: :dashboard
   resources :models do
-    resources :properties, only: %w(new create)
+    resources :cascades, shallow: true do
+      new do
+        get :as_source
+        get :as_destination
+      end
+    end
+    resources :properties do
+      collection do
+        match :sort, via: %w(get patch)
+      end
+    end
     resources :regular_properties, shallow: true
     resources :hash_properties, shallow: true
     resources :enumeration_properties, shallow: true
@@ -13,17 +23,17 @@ Rails.application.routes.draw do
     resources :sortables, shallow: true
     resources :trashables, shallow: true
   end
-  resources :properties, only: %w(edit update destroy) do
-    resources :acceptance_validations, only: %w(new create)
-    resources :confirmation_validations, only: %w(new create)
-    resources :exclusion_validations, only: %w(new create)
-    resources :format_validations, only: %w(new create)
-    resources :inclusion_validations, only: %w(new create)
-    resources :length_validations, only: %w(new create)
-    resources :numericality_validations, only: %w(new create)
-    resources :presence_validations, only: %w(new create)
-    resources :absence_validations, only: %w(new create)
-    resources :uniqueness_validations, only: %w(new create)
+  resources :properties do
+    resources :acceptance_validations, shallow: true
+    resources :confirmation_validations, shallow: true
+    resources :exclusion_validations, shallow: true
+    resources :format_validations, shallow: true
+    resources :inclusion_validations, shallow: true
+    resources :length_validations, shallow: true
+    resources :numericality_validations, shallow: true
+    resources :presence_validations, shallow: true
+    resources :absence_validations, shallow: true
+    resources :uniqueness_validations, shallow: true
   end
   resources :projects
   get :sign_in, to: 'sessions#new', as: :sign_in

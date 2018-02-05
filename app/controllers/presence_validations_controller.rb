@@ -1,29 +1,13 @@
 class PresenceValidationsController < ApplicationController
-  before_action :find_presence_validation, only: %w(edit update destroy)
-  before_action :find_property, only: %w(new create)
+  before_action :find_presence_validation, only: %w(show destroy)
+  before_action :find_property, only: %w(create)
 
-  def new
-    @presence_validation = @property.build_presence_validation
-  end
-
-  def edit
+  def show
   end
 
   def create
-    @presence_validation = @property.build_presence_validation(presence_validation_params)
-    if @presence_validation.save
-      redirect_to @property.model, notice: notice_sentence
-    else
-      render action: 'new'
-    end
-  end
-
-  def update
-    if @presence_validation.update(presence_validation_params)
-      redirect_to @presence_validation.property.model, notice: notice_sentence
-    else
-      render action: 'edit'
-    end
+    @property.create_presence_validation
+    redirect_to @property.model, notice: notice_sentence
   end
 
   def destroy
@@ -32,10 +16,6 @@ class PresenceValidationsController < ApplicationController
   end
 
   protected
-    def presence_validation_params
-      params.require(:presence_validation).permit!
-    end
-
     def find_presence_validation
       @presence_validation = PresenceValidation.find(params[:id])
     end

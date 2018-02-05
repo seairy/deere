@@ -6,18 +6,18 @@
 </div>
 <div class="container">
   <%= render "common/error_messages", target: @confirmation_validation %>
-  <%= form_for [@property, @confirmation_validation], url: property_confirmation_validations_path(@property, @confirmation_validation), html: { class: 'form-horizontal' } do |f| %>
+  <%= form_for @confirmation_validation, html: { class: 'form-horizontal' } do |f| %>
     <div class="block block-condensed">
       <div class="app-heading app-heading-small">
         <div class="title">
-          <h2>New <%= arm_t('confirmation_validation') %></h2>
+          <h2>Edit <%= arm_t('confirmation_validation') %></h2>
         </div>
       </div>
       <div class="block-content">
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'confirmation_validation.property' %></label>
           <div class="col-sm-6">
-            <%= text_field_tag nil, @property.en_name, readonly: true, class: 'form-control' %>
+            <%= text_field_tag nil, @confirmation_validation.property.en_name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
@@ -27,14 +27,14 @@
               <label><%= f.radio_button :case_sensitive, true %> Yes</label>
             </div>
             <div class="app-radio inline round">
-              <label><%= f.radio_button :case_sensitive, false, checked: true %> No</label>
+              <label><%= f.radio_button :case_sensitive, false %> No</label>
             </div>
           </div>
         </div>
       </div>
       <div class="block-footer">
-        <%= f.submit 'Create', class: 'btn btn-primary' %>
-        <%= link_to 'Return', @property.model, class: 'pull-right btn btn-default' %>
+        <%= f.submit 'Update', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @confirmation_validation.property.model, class: 'pull-right btn btn-default' %>
       </div>
     </div>
   <% end %>
