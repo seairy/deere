@@ -2,7 +2,7 @@
   <label class="col-sm-3 control-label"><%= ara_t 'common_validation.empty_tolerance' %> <span class="required">*</span></label>
   <div class="col-sm-6">
     <div class="app-radio inline round">
-      <label><%= field.radio_button :empty_tolerance, :none, checked: (@property.common_validation.new_record? or @property.common_validation.empty_tolerance_none?) %> None</label>
+      <label><%= field.radio_button :empty_tolerance, :not_allowed, checked: (@property.common_validation.new_record? or @property.common_validation.empty_tolerance_not_allowed?) %> Not allowed</label>
     </div>
     <div class="app-radio inline round">
       <label><%= field.radio_button :empty_tolerance, :null %> NULL</label>

@@ -19,7 +19,28 @@ class Model < ApplicationRecord
   validates :zh_name, presence: true, length: { maximum: 100 }
   validates :en_name, presence: true, length: { maximum: 100 }
 
-  def cascades_ids
-    [id, cascades_as_source.pluck(:destination_id), cascades_as_destination.pluck(:source_id)].flatten.compact
+  def cascade_ids
+    [cascades_as_source.pluck(:destination_id), cascades_as_destination.pluck(:source_id)].flatten.compact
   end
+
+  def owners level
+    models_in_chain(:owner, level)
+  end
+
+  def children level
+    models_in_chain(:child, level)
+  end
+
+  protected
+    def models_in_chain direction, level
+      raise ArgumentError.new('invalid direction, only can be :owner or :child') if direction != :owner and direction != :child
+      raise ArgumentError.new('level is not a valid number') unless level.is_a?(Integer)
+      raise ArgumentError.new('level must be greater than zero') if level < 1
+      [[self]].tap do |array|
+        (1..level).each do |current_level|
+          break if array.last.blank?
+          array << array.last.map{|model| model.send("cascades_as_#{case direction when :owner then 'destination' when :child then 'source' end}").map{|cascade| cascade.send("#{case direction when :owner then 'source' when :child then 'destination' end}")}}.flatten
+        end
+      end.drop(1).flatten
+    end
 end

@@ -6,7 +6,7 @@
 </div>
 <div class="container">
   <%= render "common/error_messages", target: @cascade %>
-  <%= form_for [@model, @cascade], html: { class: 'form-horizontal' } do |f| %>
+  <%= form_for [@model, @cascade], url: create_as_destination_model_cascades_path(@model, @cascade), html: { class: 'form-horizontal' } do |f| %>
     <div class="block block-condensed">
       <div class="app-heading app-heading-small">
         <div class="title">
@@ -17,13 +17,25 @@
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'cascade.source' %> <span class="required">*</span></label>
           <div class="col-sm-6">
-            <%= f.collection_select :source_id, Model.where.not(id: @model.cascades_ids), :id, :en_name, {}, class: 'form-control s2-select' %>
+            <%= f.collection_select :source_id, Model.where.not(id: @model.id), :id, :en_name, {}, class: 'form-control s2-select' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.source_alias' %></label>
+          <div class="col-sm-6">
+            <%= f.text_field :source_alias, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'cascade.destination' %></label>
           <div class="col-sm-6">
             <%= text_field_tag nil, @model.en_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.destination_alias' %></label>
+          <div class="col-sm-6">
+            <%= f.text_field :destination_alias, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
@@ -48,10 +60,22 @@
             </div>
           </div>
         </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.action_when_owner_destroyed' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.select :action_when_owner_destroyed, Cascade.action_when_owner_destroyed.options, {}, class: 'form-control s2-select' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.action_when_child_destroyed' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.select :action_when_child_destroyed, Cascade.action_when_child_destroyed.options, {}, class: 'form-control s2-select' %>
+          </div>
+        </div>
       </div>
       <div class="block-footer">
         <%= f.submit 'Create', class: 'btn btn-primary' %>
-        <%= link_to 'Return', @cascade.source, class: 'pull-right btn btn-default' %>
+        <%= link_to 'Return', @cascade.destination, class: 'pull-right btn btn-default' %>
       </div>
     </div>
   <% end %>

@@ -1,6 +1,10 @@
 class CascadesController < ApplicationController
-  before_action :find_cascade, only: %w(edit update destroy)
-  before_action :find_model, only: %w(as_source as_destination create)
+  before_action :find_cascade, only: %w(show edit update destroy)
+  before_action :find_model, only: %w(as_source as_destination create_as_source create_as_destination)
+
+  def show
+    @available_models_for_cascade_redundancy = @cascade.source.owners(3).reject{|model| @cascade.redundancies.map(&:model_id).include?(model.id)}
+  end
 
   def as_source
     @cascade = @model.cascades_as_source.new
@@ -13,23 +17,27 @@ class CascadesController < ApplicationController
   def edit
   end
 
-  def create
-    @cascade = Cascade.new(cascade_params)
-    if @cascade.source.blank?
-      @cascade.source = @model
-    elsif @cascade.destination.blank?
-      @cascade.destination = @model
-    end
+  def create_as_source
+    @cascade = Cascade.new(cascade_params.merge(source: @model))
     if @cascade.save
       redirect_to @model, notice: notice_sentence
     else
-      render action: 'new'
+      render action: 'as_source'
+    end
+  end
+
+  def create_as_destination
+    @cascade = Cascade.new(cascade_params.merge(destination: @model))
+    if @cascade.save
+      redirect_to @model, notice: notice_sentence
+    else
+      render action: 'as_destination'
     end
   end
 
   def update
     if @cascade.update(cascade_params)
-      redirect_to @cascade.model, notice: notice_sentence
+      redirect_to cascade_path(@cascade, from: params[:from]), notice: notice_sentence
     else
       render action: 'edit'
     end
@@ -37,7 +45,10 @@ class CascadesController < ApplicationController
 
   def destroy
     @cascade.destroy
-    redirect_to @cascade.model, notice: notice_sentence
+    redirect_to (case params[:from]
+    when 'source' then @cascade.source
+    when 'destination' then @cascade.destination
+    end), notice: notice_sentence
   end
 
   protected

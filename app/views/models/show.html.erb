@@ -62,7 +62,8 @@
         </div>
       </div>
       <div class="block-footer">
-        <%= link_to 'Edit', edit_model_path(@model), class: 'btn btn-default' %>
+        <%= link_to 'Edit', edit_model_path(@model), class: 'btn btn-primary' %>
+        <%= link_to 'Return', models_path, class: 'btn btn-default pull-right' %>
       </div>
     </div>
     <div class="block block-condensed">
@@ -139,7 +140,17 @@
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'model.state_machine' %></label>
           <div class="col-sm-6">
-            <%= text_field_tag nil, boolean_formatter(@model.state_machine.present?), readonly: true, class: 'form-control' %>
+            <div class="input-group">
+              <%= text_field_tag nil, boolean_formatter(@model.state_machine.present?), readonly: true, class: 'form-control' %>
+              <span class="input-group-btn">
+                <% if @model.state_machine.present? %>
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), @model.state_machine, class: 'btn btn-default' %>
+                <%= link_to raw('<i class="fa fa-times"></i>'), @model.state_machine, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
+                <% else %>
+                <%= link_to raw('<i class="fa fa-plus"></i>'), model_state_machines_path(@model, @model.build_state_machine), method: :post, class: 'btn btn-default' %>
+                <% end %>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -156,7 +167,7 @@
           <% if @model.cascades_as_destination.present? %>
           <div class="col-sm-9">
             <% @model.cascades_as_destination.each do |cascade| %>
-            <span class="btn btn-default padding-left-10 padding-right-10"><%= cascade.source.en_name %></span>
+            <%= link_to cascade.source.en_name, cascade_path(cascade, from: 'destination'), class: 'btn btn-default padding-left-10 padding-right-10' %>
             <% end %>
           </div>
           <% else %>
@@ -170,7 +181,7 @@
           <% if @model.cascades_as_source.with_type(:has_one).present? %>
           <div class="col-sm-9">
             <% @model.cascades_as_source.with_type(:has_one).each do |cascade| %>
-            <span class="btn btn-default padding-left-10 padding-right-10"><%= cascade.destination.en_name %></span>
+            <%= link_to cascade.destination.en_name, cascade_path(cascade, from: 'source'), class: 'btn btn-default padding-left-10 padding-right-10' %>
             <% end %>
           </div>
           <% else %>
@@ -184,7 +195,7 @@
           <% if @model.cascades_as_source.with_type(:has_many).present? %>
           <div class="col-sm-9">
             <% @model.cascades_as_source.with_type(:has_many).each do |cascade| %>
-            <span class="btn btn-default padding-left-10 padding-right-10"><%= cascade.destination.en_name %></span>
+            <%= link_to cascade.destination.en_name, cascade_path(cascade, from: 'source'), class: 'btn btn-default padding-left-10 padding-right-10' %>
             <% end %>
           </div>
           <% else %>

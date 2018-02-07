@@ -42,7 +42,7 @@ namespace :database do
               end
             end
           end
-          Cascade.create!(source: province, destination: city, type: :has_many, optional: false)
+          Cascade.create!(source: province, destination: city, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing)
           region = project.models.create!(name: 'region', zh_name: '地区', en_name: 'Region').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
             model.regular_properties.tap do |regular_properties_association|
@@ -52,7 +52,7 @@ namespace :database do
               end
             end
           end
-          Cascade.create!(source: city, destination: region, type: :has_many, optional: false).tap do |cascade|
+          Cascade.create!(source: city, destination: region, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing).tap do |cascade|
             cascade.redundancies.create!(model: province)
           end
           station = project.models.create!(name: 'station', zh_name: '工作站', en_name: 'Station').tap do |model|
@@ -85,7 +85,7 @@ namespace :database do
               end
             end
           end
-          Cascade.create!(source: region, destination: station, type: :has_many, optional: false)
+          Cascade.create!(source: region, destination: station, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing)
           platform = project.models.create!(name: 'platform', zh_name: '平台', en_name: 'Platform').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
             model.regular_properties.tap do |regular_properties_association|
@@ -119,8 +119,8 @@ namespace :database do
               end
             end
           end
-          Cascade.create!(source: brand, destination: platform, type: :has_many, optional: false)
-          Cascade.create!(source: station, destination: platform, type: :has_many, optional: false)
+          Cascade.create!(source: brand, destination: platform, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing)
+          Cascade.create!(source: station, destination: platform, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing)
           platform_order = project.models.create!(name: 'platform_order', zh_name: '平台订单', en_name: 'Platform Order').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
             model.regular_properties.tap do |regular_properties_association|
@@ -185,7 +185,7 @@ namespace :database do
               end
               regular_properties_association.create!(name: 'new_user', zh_name: '新用户', en_name: 'New?', type: :boolean, common_validation_attributes: { empty_tolerance: :blank, on_actions: :all })
               regular_properties_association.create!(name: 'followed_user', zh_name: '收藏用户', en_name: 'Followed?', type: :boolean, common_validation_attributes: { empty_tolerance: :blank, on_actions: :all })
-              regular_properties_association.create!(name: 'product_original_price', zh_name: '商品价格', en_name: 'Product Original Price', type: :decimal, common_validation_attributes: { empty_tolerance: :not_allowed, on_actions: :all }).tap do |property|
+              regular_properties_association.create!(name: 'product_original_price', zh_name: '商品价格', en_name: 'Product Original Price', type: :decimal, precision: 10, scale: 2, common_validation_attributes: { empty_tolerance: :not_allowed, on_actions: :all }).tap do |property|
                 property.create_numericality_validation!(only_integer: false)
               end
               regular_properties_association.create!(name: 'packing_charge', zh_name: '餐盒费', en_name: 'Packing Charge', type: :decimal, precision: 6, scale: 2, common_validation_attributes: { empty_tolerance: :not_allowed, on_actions: :all }).tap do |property|
@@ -211,7 +211,7 @@ namespace :database do
               end
             end
           end
-          Cascade.create!(source: platform, destination: platform_order, type: :has_many, optional: false).tap do |cascade|
+          Cascade.create!(source: platform, destination: platform_order, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing).tap do |cascade|
             cascade.redundancies.create!(model: brand)
             cascade.redundancies.create!(model: station)
           end
@@ -234,7 +234,7 @@ namespace :database do
               end
             end
           end
-          Cascade.create!(source: platform, destination: platform_review, type: :has_many, optional: false).tap do |cascade|
+          Cascade.create!(source: platform, destination: platform_review, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing).tap do |cascade|
             cascade.redundancies.create!(model: brand)
             cascade.redundancies.create!(model: station)
           end

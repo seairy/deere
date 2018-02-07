@@ -1,0 +1,42 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @state_machine_event %>
+  <%= form_for @state_machine_event, html: { class: 'form-horizontal' } do |f| %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>Edit <%= arm_t('state_machine_event') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'state_machine_event.name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'state_machine_event.sources' %></label>
+          <div class="col-sm-6">
+            <%= f.collection_select :state_machine_state_ids_for_source, @state_machine_event.state_machine.states, :id, :name, {}, multiple: true, class: 'form-control s2-select' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'state_machine_event.destination' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.collection_select :destination_id, @state_machine_event.state_machine.states, :id, :name, {}, class: 'form-control s2-select' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Update', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @state_machine_event.state_machine, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

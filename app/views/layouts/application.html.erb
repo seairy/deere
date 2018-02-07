@@ -16,18 +16,24 @@
           <a href="#" class="app-navigation-logo">Deere</a>
           <nav>
             <ul>
-              <li class="title">MAIN</li>
+              <li class="title">HOME</li>
               <%= nav 'Dashboard', 'Ds', { dashboard: :all }, dashboard_path %>
             </ul>
             <ul>
               <li class="title">ARCHITECTURE</li>
               <%= nav 'Models', 'Mo', { models: :all }, models_path %>
+              <%= nav 'Diagram', 'Dg', { diagram: :all }, diagram_path %>
             </ul>
             <ul>
               <li class="title">USER INTERFACE</li>
+              <%= nav 'Pages', 'Pg', {}, '' %>
             </ul>
             <ul>
               <li class="title">INTERGRATION</li>
+              <%= nav 'Eleme API', 'El', {}, '' %>
+              <%= nav 'Meituan API', 'Mt', {}, '' %>
+              <%= nav 'Enterprise WeChat', 'Wc', {}, '' %>
+              <%= nav 'SMS', 'Sm', {}, '' %>
             </ul>
             <ul>
               <li class="title">SYSTEM</li>
@@ -109,7 +115,7 @@
                   </ul>
                 </div>
               </li>
-              <li><%= link_to raw('<span class="icon-power-switch"></span>'), sign_out_path, class: 'btn btn-default btn-icon' %></li>
+              <li><%= link_to raw('<span class="icon-power-switch"></span>'), sign_out_path, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-icon' %></li>
             </ul>
           </div>
           <%= yield %>

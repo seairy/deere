@@ -143,6 +143,7 @@ en:
       minimum_must_be_provided_before_include: Minimum must be provided before include
       maximum_must_be_provided_before_include: Maximum must be provided before include
       at_least_one_action_to_be_validate: At least one action to be validate
+      alias_must_be_provided_when_source_and_destination_are_both_exist: Alias must be provied when source and destination are both exist
     template:
       body: 'There were problems with the following fields:'
       header:

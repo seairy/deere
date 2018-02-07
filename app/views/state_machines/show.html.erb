@@ -1,0 +1,112 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= styled_flash %>
+  <div class="block block-condensed">
+    <div class="app-heading app-heading-small">
+      <div class="title">
+        <h2>View <%= arm_t('state_machine') %></h2>
+      </div>
+    </div>
+    <div class="block-content">
+      <div class="form-group">
+        <label class="col-sm-3 control-label"><%= ara_t 'state_machine.model' %></label>
+        <div class="col-sm-6">
+          <%= text_field_tag nil, @state_machine.model.en_name, readonly: true, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+    <div class="block-footer">
+      <%= link_to 'Destroy', @state_machine, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+      <%= link_to 'Return', @state_machine.model, class: 'pull-right btn btn-default' %>
+    </div>
+  </div>
+  <div class="block block-condensed">
+    <div class="app-heading app-heading-small">
+      <div class="title">
+        <h2><%= arm_t('state_machine_state') %> List</h2>
+      </div>
+    </div>
+    <div class="block-content">
+      <div class="dd" id="nestable-state-machine-state">
+        <ol class="dd-list">
+          <% @state_machine.states.order(:position).each do |state_machine_state| %>
+          <li class="dd-item dd-item-extra" data-id="<%= state_machine_state.id %>">
+            <div class="dd-handle dd-handle-extra">
+              <i class="fa fa-circle text-danger margin-right-20"></i>
+            </div>
+            <div class="dd-content dd-content-extra">
+              <%= state_machine_state.name %><%= ' (initial)' if state_machine_state.initial? %>
+              <%= link_to '[Destroy]', state_machine_state, method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-muted pull-right' %>
+              <%= link_to '[Edit]', edit_state_machine_state_path(state_machine_state), class: 'text-muted pull-right margin-right-20' %>
+              <%= link_to '[Initial]', initial_state_machine_state_path(state_machine_state), method: :patch, class: 'text-muted pull-right margin-right-20' if !state_machine_state.initial? %>
+            </div>
+          </li>
+          <% end %>
+        </ol>
+      </div>
+    </div>
+    <div class="block-footer">
+      <%= link_to 'New', new_state_machine_state_machine_state_path(@state_machine), class: 'btn btn-default' %>
+    </div>
+  </div>
+  <div class="block block-condensed">
+    <div class="app-heading app-heading-small">
+      <div class="title">
+        <h2><%= arm_t('state_machine_state') %> List</h2>
+      </div>
+    </div>
+    <div class="block-content">
+      <div class="dd" id="nestable-state-machine-event">
+        <ol class="dd-list">
+          <% @state_machine.events.order(:position).each do |state_machine_event| %>
+          <li class="dd-item dd-item-extra" data-id="<%= state_machine_event.id %>">
+            <div class="dd-handle dd-handle-extra">
+              <i class="fa fa-circle text-danger margin-right-20"></i>
+            </div>
+            <div class="dd-content dd-content-extra">
+              <%= state_machine_event.name %>
+              (<% if state_machine_event.sources.present? %>
+                from: [<%= state_machine_event.sources.map{|state_machine_event_source| state_machine_event_source.state_machine_state.name}.join(', ') %>],
+              <% end %>
+              to: <%= state_machine_event.destination.name %> )
+              <%= link_to '[Destroy]', state_machine_event, method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-muted pull-right' %>
+              <%= link_to '[Edit]', edit_state_machine_event_path(state_machine_event), class: 'text-muted pull-right margin-right-20' %>
+            </div>
+          </li>
+          <% end %>
+        </ol>
+      </div>
+    </div>
+    <div class="block-footer">
+      <%= link_to 'New', new_state_machine_state_machine_event_path(@state_machine), class: 'btn btn-default' %>
+    </div>
+  </div>
+</div>
+<% content_for :javascript do %>
+  <script>
+    jQuery(document).ready(function() {
+      $("#nestable-state-machine-state").nestable().on('change', function() {
+        sorted_ids = $('#nestable-state-machine-state').nestable('serialize').map(function(item, i) { return item.id }).join()
+        $.ajax({
+          url: '/state_machines/<%= @state_machine.id %>/state_machine_states/sort',
+          method: 'PATCH',
+          data: { state_machine_state_ids: sorted_ids }
+        });
+      });
+
+      $("#nestable-state-machine-event").nestable().on('change', function() {
+        sorted_ids = $('#nestable-state-machine-event').nestable('serialize').map(function(item, i) { return item.id }).join()
+        $.ajax({
+          url: '/state_machines/<%= @state_machine.id %>/state_machine_events/sort',
+          method: 'PATCH',
+          data: { state_machine_event_ids: sorted_ids }
+        });
+      });
+    });
+  </script>
+<% end %>

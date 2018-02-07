@@ -1,0 +1,116 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= styled_flash %>
+  <form class="form-horizontal">
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>View <%= arm_t('cascade') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.source' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @cascade.source.en_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.source_alias' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @cascade.source_alias, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.destination' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @cascade.destination.en_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.destination_alias' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @cascade.destination_alias, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.type' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @cascade.type_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.optional' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, boolean_formatter(@cascade.optional), readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.action_when_owner_destroyed' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @cascade.action_when_owner_destroyed_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.action_when_child_destroyed' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @cascade.action_when_child_destroyed_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.redundancies' %></label>
+          <div class="col-sm-9">
+          <% @cascade.redundancies.each do |cascade_redundancy| %>
+          <div class="btn-group dropup margin-right-5">
+            <button type="button" class="btn btn-default padding-left-10 padding-right-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%= cascade_redundancy.model.en_name %>
+            </button>
+            <ul class="dropdown-menu">
+              <li><%= link_to 'Destroy', cascade_redundancy, method: :delete, data: { confirm: 'Are you sure?' } %></li>
+            </ul>
+          </div>
+          <% end %>
+          <%= link_to raw('<i class="fa fa-plus"></i>'), 'javascript:;', data: { toggle: 'modal', target: "#modal-new-cascade-redundancy" }, class: 'btn btn-default btn-icon' if @available_models_for_cascade_redundancy.present? %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= link_to 'Edit', edit_cascade_path(@cascade, from: params[:from]), class: 'btn btn-primary' %>
+        <%= link_to 'Destroy', cascade_path(@cascade, from: params[:from]), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <%= link_to 'Return', case params[:from] when 'source' then @cascade.source when 'destination' then @cascade.destination end, class: 'pull-right btn btn-default' %>
+        <%  %>
+      </div>
+    </div>
+  </form>
+</div>
+<% if @available_models_for_cascade_redundancy.present? %>
+<div class="modal fade" id="modal-new-cascade-redundancy" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="icon-cross"></span></button>
+    <%= form_for [@cascade, @cascade.redundancies.new], html: { class: 'form-horizontal' } do |f| %>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">New Cascade Redundancy</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="col-sm-3 control-label"><%= ara_t 'cascade_redundancy.model' %> <span class="required">*</span></label>
+            <div class="col-sm-6">
+              <%= f.collection_select :model_id, @available_models_for_cascade_redundancy, :id, :en_name, {}, class: 'form-control s2-select' %>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <%= f.submit 'Create', class: 'btn btn-primary' %>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+<% end %>

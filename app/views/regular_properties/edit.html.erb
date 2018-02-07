@@ -46,6 +46,24 @@
           </div>
         </div>
       </div>
+      <% case @property.type %>
+      <% when 'decimal' %>
+      <div class="block-divider-text">extra fields</div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.precision' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :precision, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.scale' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :scale, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <% end %>
       <div class="block-divider-text"><%= arm_t('common_validation') %></div>
       <div class="block-content">
         <%= f.fields_for :common_validation, @property.common_validation do |field| %>

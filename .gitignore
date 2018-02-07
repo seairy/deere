@@ -7,16 +7,12 @@
 /config/database.yml
 /config/secrets.yml
 /config/settings.yml
-/config/sunspot.yml
 /db/schema.rb
 /log/*
 !/log/.keep
 /public/uploads
 /public/assets
-/public/nuvc
-/public/packs
 /node_modules
-/solr
 /tmp
 !/tmp/.keep
 /vendor/bundle

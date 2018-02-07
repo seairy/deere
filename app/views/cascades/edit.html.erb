@@ -6,18 +6,18 @@
 </div>
 <div class="container">
   <%= render "common/error_messages", target: @cascade %>
-  <%= form_for [@model, @cascade], url: create_as_source_model_cascades_path(@model, @cascade), html: { class: 'form-horizontal' } do |f| %>
+  <%= form_for @cascade, url: cascade_path(@cascade, from: params[:from]), html: { class: 'form-horizontal' } do |f| %>
     <div class="block block-condensed">
       <div class="app-heading app-heading-small">
         <div class="title">
-          <h2>New <%= arm_t('cascade') %></h2>
+          <h2>Edit <%= arm_t('cascade') %></h2>
         </div>
       </div>
       <div class="block-content">
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'cascade.source' %></label>
           <div class="col-sm-6">
-            <%= text_field_tag nil, @model.en_name, readonly: true, class: 'form-control' %>
+            <%= text_field_tag nil, @cascade.source.en_name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
@@ -27,9 +27,9 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'cascade.destination' %> <span class="required">*</span></label>
+          <label class="col-sm-3 control-label"><%= ara_t 'cascade.destination' %></label>
           <div class="col-sm-6">
-            <%= f.collection_select :destination_id, Model.where.not(id: @model.id), :id, :en_name, {}, class: 'form-control s2-select' %>
+            <%= text_field_tag nil, @cascade.destination.en_name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
@@ -45,7 +45,7 @@
               <label><%= f.radio_button :type, :has_one %> Has one</label>
             </div>
             <div class="app-radio inline round">
-              <label><%= f.radio_button :type, :has_many, checked: (@cascade.new_record? or @cascade.type_has_many?) %> Has many</label>
+              <label><%= f.radio_button :type, :has_many %> Has many</label>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@
               <label><%= f.radio_button :optional, true %> Yes</label>
             </div>
             <div class="app-radio inline round">
-              <label><%= f.radio_button :optional, false, checked: (@cascade.new_record? or !@cascade.optional?) %> No</label>
+              <label><%= f.radio_button :optional, false %> No</label>
             </div>
           </div>
         </div>
@@ -74,8 +74,8 @@
         </div>
       </div>
       <div class="block-footer">
-        <%= f.submit 'Create', class: 'btn btn-primary' %>
-        <%= link_to 'Return', @cascade.source, class: 'pull-right btn btn-default' %>
+        <%= f.submit 'Update', class: 'btn btn-primary' %>
+        <%= link_to 'Return', cascade_path(@cascade, from: params[:from]), class: 'pull-right btn btn-default' %>
       </div>
     </div>
   <% end %>
