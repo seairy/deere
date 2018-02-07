@@ -5,7 +5,7 @@ class CascadeRedundanciesController < ApplicationController
   def create
     @cascade_redundancy = @cascade.redundancies.new(cascade_redundancy_params)
     if @cascade_redundancy.save
-      redirect_to @cascade, notice: notice_sentence
+      redirect_to cascade_path(@cascade, from: params[:from]), notice: notice_sentence
     else
       render action: 'new'
     end
@@ -13,7 +13,7 @@ class CascadeRedundanciesController < ApplicationController
 
   def destroy
     @cascade_redundancy.destroy
-    redirect_to @cascade_redundancy.cascade, notice: notice_sentence
+    redirect_to cascade_path(@cascade_redundancy.cascade, from: params[:from]), notice: notice_sentence
   end
 
   protected
