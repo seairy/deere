@@ -1,0 +1,99 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @property %>
+  <%= form_for @property, html: { class: 'form-horizontal' } do |f| %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('file_property') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.model_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @property.model.name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.type' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @property.type_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.code' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :code, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.localized_name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :localized_name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :name, class: 'form-control' %>
+          </div>
+        </div>
+      </div>      
+      <div class="block-divider-text"><%= arm_t('common_validation') %></div>
+      <div class="block-content">
+        <%= f.fields_for :common_validation, @property.common_validation do |field| %>
+          <%= render 'common_validations/form', field: field %>
+        <% end %>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Update', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @property.model, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+  <div class="block block-condensed">
+    <div class="app-heading app-heading-small">
+      <div class="title">
+        <h2><%= arm_t('image_uploader') %> List</h2>
+      </div>
+    </div>
+    <% if @property.image_uploaders.present? %>
+    <div class="table-responsive">
+      <table class="table table-head-light margin-bottom-0">
+        <thead>
+          <tr>
+            <th><%= ara_t 'image_uploader.quality' %></th>
+            <th><%= ara_t 'image_uploader.resize_method' %></th>
+            <th><%= ara_t 'image_uploader.width' %></th>
+            <th><%= ara_t 'image_uploader.height' %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @property.image_uploaders.each do |image_uploader| %>
+          <tr>
+            <td><%= image_uploader.quality %></td>
+            <td><%= image_uploader.resize_method_text %></td>
+            <td><%= image_uploader.width %></td>
+            <td><%= image_uploader.height %></td>
+            <td class="actions">
+              <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_image_uploader_path(image_uploader), class: 'btn btn-default btn-icon' %>
+              <%= link_to raw('<i class="fa fa-times"></i>'), image_uploader, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-icon' %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% end %>
+    <div class="block-footer">
+      <%= link_to 'New', new_file_property_image_uploader_path(@property), class: 'btn btn-default' %>
+    </div>
+  </div>
+</div>

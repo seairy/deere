@@ -16,9 +16,9 @@
       </div>
       <div class="block-content">
         <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'property.model_en_name' %></label>
+          <label class="col-sm-3 control-label"><%= ara_t 'property.model_name' %></label>
           <div class="col-sm-6">
-            <%= text_field_tag nil, @property.model.en_name, readonly: true, class: 'form-control' %>
+            <%= text_field_tag nil, @property.model.name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
@@ -28,21 +28,21 @@
           </div>
         </div>
         <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.code' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :code, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.localized_name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :localized_name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'property.name' %> <span class="required">*</span></label>
           <div class="col-sm-6">
             <%= f.text_field :name, class: 'form-control' %>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'property.zh_name' %> <span class="required">*</span></label>
-          <div class="col-sm-6">
-            <%= f.text_field :zh_name, class: 'form-control' %>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'property.en_name' %> <span class="required">*</span></label>
-          <div class="col-sm-6">
-            <%= f.text_field :en_name, class: 'form-control' %>
           </div>
         </div>
       </div>

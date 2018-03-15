@@ -6,7 +6,7 @@ class StateMachineEvent < ApplicationRecord
   after_initialize :set_state_machine_state_ids_for_source
   before_create :set_position
   after_save :set_sources
-  validates :name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :state_machine }, format: /\A\w+\Z/
+  validates :code, presence: true, length: { maximum: 100 }, uniqueness: { scope: :state_machine }, code: true
 
   def self.sort sequence
     sequence.split(',').each_with_index do |id, index|
@@ -17,7 +17,7 @@ class StateMachineEvent < ApplicationRecord
 
   protected
     def set_state_machine_state_ids_for_source
-      self.state_machine_state_ids_for_source = sources.map{|state_machine_event_source| state_machine_event_source.state_machine_state_id}
+      self.state_machine_state_ids_for_source = sources.map{|state_machine_event_source| state_machine_event_source.state_machine_state_id} unless new_record?
     end
 
     def set_position
@@ -25,6 +25,7 @@ class StateMachineEvent < ApplicationRecord
     end
 
     def set_sources
-      sources.destroy_all and state_machine_state_ids_for_source.delete_if(&:blank?).each{|state_machine_state_id| sources.create!(state_machine_state_id: state_machine_state_id)}
+      sources.destroy_all
+      state_machine_state_ids_for_source.delete_if(&:blank?).each{|state_machine_state_id| sources.create!(state_machine_state_id: state_machine_state_id)}
     end
 end

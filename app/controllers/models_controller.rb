@@ -46,7 +46,7 @@ class ModelsController < ApplicationController
     end
 
     def find_model
-      @model = Model.find(params[:id])
+      @model = @current_project.models.find(params[:id])
     end
 
     def format_array_attributes

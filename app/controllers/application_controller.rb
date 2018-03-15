@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
       'Successful'
     end
 
-    def alert_sentence
-      'Failed'
+    def alert_sentence extra = nil
+      "Failed#{", #{extra}" if extra.present?}"
     end
 end

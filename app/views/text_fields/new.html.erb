@@ -1,0 +1,54 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @text_field %>
+  <%= form_for [@form, @text_field], html: { class: 'form-horizontal' } do |f| %>
+    <%= hidden_field_tag :type, params[:type] %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('text_field') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'text_field.property' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.collection_select :property_id, @form.view_logic.model.properties, :id, :name, { prompt: '<Select Property>' }, class: 'form-control s2-select' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'text_field.name' %></label>
+          <div class="col-sm-6">
+            <%= f.text_field :name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'text_field.localized_name' %></label>
+          <div class="col-sm-6">
+            <%= f.text_field :localized_name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'text_field.read_only' %></label>
+          <div class="col-sm-6">
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :read_only, true %> Yes</label>
+            </div>
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :read_only, false %> No</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Create', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @form, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

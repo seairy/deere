@@ -1,0 +1,42 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= styled_flash %>
+  <form class="form-horizontal">
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>View <%= arm_t('namespace') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'namespace.name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @namespace.name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'namespace.module' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @namespace.module, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'namespace.path' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @namespace.path, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= link_to 'Edit', edit_namespace_path(@namespace), class: 'btn btn-primary' %>
+        <%= link_to 'Return', namespaces_path, class: 'btn btn-default pull-right' %>
+      </div>
+    </div>
+  </form>
+</div>

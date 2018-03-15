@@ -15,21 +15,21 @@
       </div>
       <div class="block-content">
         <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.code' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :code, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.localized_name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :localized_name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'model.name' %> <span class="required">*</span></label>
           <div class="col-sm-6">
             <%= f.text_field :name, class: 'form-control' %>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'model.zh_name' %> <span class="required">*</span></label>
-          <div class="col-sm-6">
-            <%= f.text_field :zh_name, class: 'form-control' %>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'model.en_name' %> <span class="required">*</span></label>
-          <div class="col-sm-6">
-            <%= f.text_field :en_name, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">

@@ -4,7 +4,7 @@
     <p><%= @page_metadata %></p>
   </div>
   <div class="heading-elements">
-    <%= link_to raw('<span class="icon-file-add"></span> New'), new_model_path, target: '_blank', class: 'btn btn-default btn-icon-fixed' %>
+    <%= link_to 'New', new_model_path, class: 'btn btn-default' %>
   </div>
 </div>
 <div class="container">
@@ -13,7 +13,7 @@
     <div class="col-md-3">
       <div class="tile-basic tile-basic-bordered">
         <div class="tile-content">
-          <h3 class="tile-title"><%= link_to model.name.camelize, model %></h3>
+          <h3 class="tile-title"><%= link_to model.code.camelize, model %></h3>
           <span class="tile-subtitle padding-bottom-10">R<%= model.regular_properties.length %> / E<%= model.enumeration_properties.length %> / F<%= model.file_properties.length %></span>
           <div class="app-widget-button app-widget-button-ghost app-widget-button-<%= model.orm_loggable.present? ? 'success' : 'default' %>"><span class="icon-document"></span></div>&nbsp;
           <div class="app-widget-button app-widget-button-ghost app-widget-button-<%= model.authenticatable.present? ? 'success' : 'default' %>"><span class="icon-lock"></span></div>&nbsp;

@@ -1,12 +1,19 @@
 class EnumerationElement < ApplicationRecord
   belongs_to :enumeration_property
   before_create :set_position
-  validates :name, presence: true, length: { maximum: 50 }
-  validates :zh_name, presence: true, length: { maximum: 50 }
-  validates :en_name, presence: true, length: { maximum: 50 }
+  validates :code, presence: true, length: { maximum: 100 }, uniqueness: { scope: :enumeration_property }, code: true
+  validates :localized_name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :enumeration_property }
+  validates :name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :enumeration_property }
+
+  def self.sort sequence
+    sequence.split(',').each_with_index do |id, index|
+      position = index + 1
+      find(id).update!(position: position)
+    end
+  end
 
   protected
     def set_position
-      self.position = enumeration_property.elements.maximum(:position) || 1
+      self.position = enumeration_property.elements.maximum(:position).try(:+, 1) || 1
     end
 end

@@ -1,0 +1,42 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Source Codes</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <div class="block block-condensed">
+    <div class="app-heading">
+      <div class="title">
+        <h2><%= arm_t('source_code') %> List</h2>
+      </div>
+    </div>
+    <% if @source_codes.present? %>
+    <div class="table-responsive">
+      <table class="table table-head-light margin-bottom-0">
+        <thead>
+          <tr>
+            <th><%= ara_t 'source_code.type' %></th>
+            <th><%= ara_t 'source_code.file_name' %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @source_codes.each do |source_code| %>
+          <tr>
+            <td><%= source_code.type %></td>
+            <td><%= source_code.file_name %></td>
+            <td class="actions">
+              <%= link_to raw('<i class="fa fa-file-text-o"></i>'), source_code, class: 'btn btn-default btn-icon' %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% end %>
+    <div class="block-footer">
+      <%= link_to raw('<span class="icon-warning"></span> Generate'), compile_source_codes_path, method: :post, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-icon-fixed btn-shadowed' %>
+    </div>
+  </div>
+</div>

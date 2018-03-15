@@ -6,6 +6,9 @@ class StateMachineStatesController < ApplicationController
     @state_machine_state = @state_machine.states.new
   end
 
+  def edit
+  end
+
   def create
     @state_machine_state = @state_machine.states.new(state_machine_state_params)
     if @state_machine_state.save
@@ -26,6 +29,8 @@ class StateMachineStatesController < ApplicationController
   def destroy
     @state_machine_state.destroy
     redirect_to @state_machine_state.state_machine, notice: notice_sentence
+  rescue ActiveRecord::DeleteRestrictionError
+    redirect_to @state_machine_state.state_machine, alert: alert_sentence('delete restriction error')
   end
 
   def initial

@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 
   def create
     session['project_id'] = params[:project][:id]
-    redirect_to dashboard_path
+    redirect_to models_path
   end
 
   def destroy

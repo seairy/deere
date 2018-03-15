@@ -42,6 +42,6 @@ class RegularPropertiesController < ApplicationController
     end
 
     def find_model
-      @model = @current_project.models.find(params[:model_id])
+      @model = Model.find(params[:model_id])
     end
 end

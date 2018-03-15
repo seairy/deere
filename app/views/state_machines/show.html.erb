@@ -16,7 +16,7 @@
       <div class="form-group">
         <label class="col-sm-3 control-label"><%= ara_t 'state_machine.model' %></label>
         <div class="col-sm-6">
-          <%= text_field_tag nil, @state_machine.model.en_name, readonly: true, class: 'form-control' %>
+          <%= text_field_tag nil, @state_machine.model.name, readonly: true, class: 'form-control' %>
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@
               <i class="fa fa-circle text-danger margin-right-20"></i>
             </div>
             <div class="dd-content dd-content-extra">
-              <%= state_machine_state.name %><%= ' (initial)' if state_machine_state.initial? %>
+              <%= state_machine_state.code %><%= ' (initial)' if state_machine_state.initial? %>
               <%= link_to '[Destroy]', state_machine_state, method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-muted pull-right' %>
               <%= link_to '[Edit]', edit_state_machine_state_path(state_machine_state), class: 'text-muted pull-right margin-right-20' %>
               <%= link_to '[Initial]', initial_state_machine_state_path(state_machine_state), method: :patch, class: 'text-muted pull-right margin-right-20' if !state_machine_state.initial? %>
@@ -69,11 +69,11 @@
               <i class="fa fa-circle text-danger margin-right-20"></i>
             </div>
             <div class="dd-content dd-content-extra">
-              <%= state_machine_event.name %>
+              <%= state_machine_event.code %>
               (<% if state_machine_event.sources.present? %>
-                from: [<%= state_machine_event.sources.map{|state_machine_event_source| state_machine_event_source.state_machine_state.name}.join(', ') %>],
+                from: [<%= state_machine_event.sources.map{|state_machine_event_source| state_machine_event_source.state_machine_state.code}.join(', ') %>],
               <% end %>
-              to: <%= state_machine_event.destination.name %> )
+              to: <%= state_machine_event.destination.code %> )
               <%= link_to '[Destroy]', state_machine_event, method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-muted pull-right' %>
               <%= link_to '[Edit]', edit_state_machine_event_path(state_machine_event), class: 'text-muted pull-right margin-right-20' %>
             </div>

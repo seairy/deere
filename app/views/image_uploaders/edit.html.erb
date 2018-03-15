@@ -1,0 +1,59 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @image_uploader %>
+  <%= form_for @image_uploader, html: { class: 'form-horizontal' } do |f| %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>Edit <%= arm_t('image_uploader') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'image_uploader.quality' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :quality, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'image_uploader.resize_method' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :resize_method, :fill %> Fill</label>
+            </div>
+            <div class="app-radio inline round">
+              <label><%= f.radio_button :resize_method, :fit %> Fit</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'image_uploader.width' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <%= f.text_field :width, class: 'form-control' %>
+              <span class="input-group-addon">px</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'image_uploader.height' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <%= f.text_field :height, class: 'form-control' %>
+              <span class="input-group-addon">px</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Update', class: 'btn btn-primary' %>
+        <%= link_to 'Return', edit_file_property_path(@image_uploader.file_property), class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

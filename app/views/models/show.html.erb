@@ -15,21 +15,21 @@
       </div>
       <div class="block-content">
         <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.code' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @model.code, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'model.localized_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @model.localized_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'model.name' %></label>
           <div class="col-sm-6">
             <%= text_field_tag nil, @model.name, readonly: true, class: 'form-control' %>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'model.zh_name' %></label>
-          <div class="col-sm-6">
-            <%= text_field_tag nil, @model.zh_name, readonly: true, class: 'form-control' %>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'model.en_name' %></label>
-          <div class="col-sm-6">
-            <%= text_field_tag nil, @model.en_name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
@@ -64,6 +64,43 @@
       <div class="block-footer">
         <%= link_to 'Edit', edit_model_path(@model), class: 'btn btn-primary' %>
         <%= link_to 'Return', models_path, class: 'btn btn-default pull-right' %>
+      </div>
+    </div>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2><%= arm_t('submodel') %> List</h2>
+        </div>
+      </div>
+      <% if @model.submodels.present? %>
+      <div class="table-responsive">
+        <table class="table table-head-light margin-bottom-0">
+          <thead>
+            <tr>
+              <th><%= ara_t 'submodel.code' %></th>
+              <th><%= ara_t 'submodel.name' %></th>
+              <th><%= ara_t 'submodel.localized_name' %></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @model.submodels.each do |submodel| %>
+            <tr>
+              <td><%= submodel.code %></td>
+              <td><%= submodel.name %></td>
+              <td><%= submodel.localized_name %></td>
+              <td class="actions">
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_submodel_path(submodel), class: 'btn btn-default btn-icon' %>
+                <%= link_to raw('<i class="fa fa-times"></i>'), submodel, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-icon' %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% end %>
+      <div class="block-footer">
+        <%= link_to 'New', new_model_submodel_path(@model), class: 'btn btn-default' %>
       </div>
     </div>
     <div class="block block-condensed">
@@ -161,50 +198,48 @@
           <h2><%= arm_t('cascade') %> List</h2>
         </div>
       </div>
-      <div class="block-content">
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'model.many_to_one_cascades' %></label>
-          <% if @model.cascades_as_destination.present? %>
-          <div class="col-sm-9">
+      <% if @model.cascades_as_destination.present? or @model.cascades_as_source.present? %>
+      <div class="table-responsive">
+        <table class="table table-head-light margin-bottom-0">
+          <thead>
+            <tr>
+              <th><%= ara_t 'cascade.type' %></th>
+              <th><%= ara_t 'cascade.associated_model' %></th>
+              <th><%= ara_t 'cascade.action_when_owner_destroyed' %></th>
+              <th><%= ara_t 'cascade.action_when_child_destroyed' %></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
             <% @model.cascades_as_destination.each do |cascade| %>
-            <%= link_to cascade.source.en_name, cascade_path(cascade, from: 'destination'), class: 'btn btn-default padding-left-10 padding-right-10' %>
+            <tr>
+              <td>Belongs to</td>
+              <td>
+                <%= cascade.source.name %>
+                <%= '(Optional)' if cascade.optional? %>
+              </td>
+              <td><%= cascade.action_when_owner_destroyed_text %></td>
+              <td><%= cascade.action_when_child_destroyed_text %></td>
+              <td class="actions">
+                <%= link_to raw('<i class="fa fa-file-text-o"></i>'), cascade_path(cascade, from: 'destination'), class: 'btn btn-default btn-icon' %>
+              </td>
+            </tr>
             <% end %>
-          </div>
-          <% else %>
-          <div class="col-sm-6">
-            <%= text_field_tag nil, 'None', readonly: true, class: 'form-control' %>
-          </div>
-          <% end %>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'model.one_to_one_cascades' %></label>
-          <% if @model.cascades_as_source.with_type(:has_one).present? %>
-          <div class="col-sm-9">
-            <% @model.cascades_as_source.with_type(:has_one).each do |cascade| %>
-            <%= link_to cascade.destination.en_name, cascade_path(cascade, from: 'source'), class: 'btn btn-default padding-left-10 padding-right-10' %>
+            <% @model.cascades_as_source.each do |cascade| %>
+            <tr>
+              <td><%= cascade.type_text %></td>
+              <td><%= cascade.destination.name %></td>
+              <td><%= cascade.action_when_owner_destroyed_text %></td>
+              <td><%= cascade.action_when_child_destroyed_text %></td>
+              <td class="actions">
+                <%= link_to raw('<i class="fa fa-file-text-o"></i>'), cascade_path(cascade, from: 'source'), class: 'btn btn-default btn-icon' %>
+              </td>
+            </tr>
             <% end %>
-          </div>
-          <% else %>
-          <div class="col-sm-6">
-            <%= text_field_tag nil, 'None', readonly: true, class: 'form-control' %>
-          </div>
-          <% end %>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'model.one_to_many_cascades' %></label>
-          <% if @model.cascades_as_source.with_type(:has_many).present? %>
-          <div class="col-sm-9">
-            <% @model.cascades_as_source.with_type(:has_many).each do |cascade| %>
-            <%= link_to cascade.destination.en_name, cascade_path(cascade, from: 'source'), class: 'btn btn-default padding-left-10 padding-right-10' %>
-            <% end %>
-          </div>
-          <% else %>
-          <div class="col-sm-6">
-            <%= text_field_tag nil, 'None', readonly: true, class: 'form-control' %>
-          </div>
-          <% end %>
-        </div>
+          </tbody>
+        </table>
       </div>
+      <% end %>
       <div class="block-footer">
         <div class="btn-group dropup">
           <button type="button" class="btn btn-default">New</button>
@@ -233,7 +268,7 @@
           <thead>
             <tr>
               <th><%= ara_t 'property.type' %></th>
-              <th><%= ara_t 'property.name' %></th>
+              <th><%= ara_t 'property.code' %></th>
               <th><%= ara_t 'property.i18n_name' %></th>
               <th><%= ara_t 'property.common_validation' %></th>
               <th><%= ara_t 'property.validations' %></th>
@@ -244,8 +279,8 @@
             <% @properties.order(:position).each do |property| %>
             <tr>
               <td><%= property.model_name.human %><br /><%= property.type_text %></td>
-              <td><%= property.name %><br />#<%= property.position %></td>
-              <td><%= property.zh_name %><br /><%= property.en_name %></td>
+              <td><%= property.code %><br />#<%= property.position %></td>
+              <td><%= property.localized_name %><br /><%= property.name %></td>
               <td>
                 <% case property.common_validation.empty_tolerance %>
                 <% when 'not_allowed' %>
@@ -320,6 +355,39 @@
             <li><%= link_to 'File', new_model_file_property_path(@model) %></li>
           </ul>
         </div>
+      </div>
+    </div>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2><%= arm_t('custom_validation') %> List</h2>
+        </div>
+      </div>
+      <% if @model.custom_validations.present? %>
+      <div class="table-responsive">
+        <table class="table table-head-light margin-bottom-0">
+          <thead>
+            <tr>
+              <th><%= ara_t 'custom_validation.code' %></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @model.custom_validations.each do |custom_validation| %>
+            <tr>
+              <td><%= custom_validation.code %></td>
+              <td class="actions">
+                <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_custom_validation_path(custom_validation), class: 'btn btn-default btn-icon' %>
+                <%= link_to raw('<i class="fa fa-times"></i>'), custom_validation, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-icon' %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% end %>
+      <div class="block-footer">
+        <%= link_to 'New', new_model_custom_validation_path(@model), class: 'btn btn-default' %>
       </div>
     </div>
   </form>

@@ -1,6 +1,7 @@
 class HashProperty < Property
   has_many :serialized_hashes
-  before_create :set_type
+  accepts_nested_attributes_for :serialized_hashes
+  after_initialize :set_type
 
   protected
     def set_type

@@ -17,7 +17,7 @@
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'cascade.source' %></label>
           <div class="col-sm-6">
-            <%= text_field_tag nil, @cascade.source.en_name, readonly: true, class: 'form-control' %>
+            <%= text_field_tag nil, @cascade.source.name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
@@ -29,7 +29,7 @@
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'cascade.destination' %></label>
           <div class="col-sm-6">
-            <%= text_field_tag nil, @cascade.destination.en_name, readonly: true, class: 'form-control' %>
+            <%= text_field_tag nil, @cascade.destination.name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
@@ -68,7 +68,7 @@
           <% @cascade.redundancies.each do |cascade_redundancy| %>
           <div class="btn-group dropup margin-right-5">
             <button type="button" class="btn btn-default padding-left-10 padding-right-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= cascade_redundancy.model.en_name %>
+              <%= cascade_redundancy.model.name %>
             </button>
             <ul class="dropdown-menu">
               <li><%= link_to 'Destroy', cascade_redundancy_path(cascade_redundancy, from: params[:from]), method: :delete, data: { confirm: 'Are you sure?' } %></li>
@@ -101,7 +101,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label"><%= ara_t 'cascade_redundancy.model' %> <span class="required">*</span></label>
             <div class="col-sm-6">
-              <%= f.collection_select :model_id, @available_models_for_cascade_redundancy, :id, :en_name, {}, class: 'form-control s2-select' %>
+              <%= f.collection_select :model_id, @available_models_for_cascade_redundancy, :id, :name, {}, class: 'form-control s2-select' %>
             </div>
           </div>
         </div>

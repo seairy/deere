@@ -1,0 +1,23 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @form %>
+  <%= form_for @form, html: { class: 'form-horizontal' } do |f| %>
+    <%= hidden_field_tag :view_logic_id, @view_logic.id %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('form') %></h2>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Create', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @view_logic, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

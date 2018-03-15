@@ -2,6 +2,10 @@
   content: "\e922";
 }
 
+.app-navigation nav ul > li.openable > a:after {
+  content: "\e939";
+}
+
 .form-control[multiple] {
   padding: 5px 10px;
 }

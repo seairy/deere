@@ -144,6 +144,7 @@ en:
       maximum_must_be_provided_before_include: Maximum must be provided before include
       at_least_one_action_to_be_validate: At least one action to be validate
       alias_must_be_provided_when_source_and_destination_are_both_exist: Alias must be provied when source and destination are both exist
+      does_not_follow_the_naming_convention: Doesn't follow the naming convention
     template:
       body: 'There were problems with the following fields:'
       header:
@@ -249,6 +250,7 @@ en:
       model: Model
       property: Property
       regular_property: Regular Property
+      hash_property: Hash Property
       enumeration_property: Enumeration Property
       file_property: File Property
       common_validation: Common Validation
@@ -271,3 +273,9 @@ en:
         i18n: I18N Name
         type: Type
         validations: Validations
+      enumeration_element:
+        name: Name
+        zh_name: Name in Chinese
+        en_name: Name in English
+      serialized_hash:
+        name: Name

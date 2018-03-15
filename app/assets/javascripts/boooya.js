@@ -27,6 +27,9 @@
 //= require boooya/isotope.pkgd
 //= require boooya/codemirror
 //= require boooya/codemirror/htmlmixed
+//= require boooya/codemirror/htmlembedded
+//= require boooya/codemirror/ruby
+//= require boooya/codemirror/yaml
 //= require boooya/clipboard
 
 //= require boooya/theme

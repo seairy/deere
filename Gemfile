@@ -25,6 +25,7 @@ gem 'geocoder'
 gem 'kaminari'
 gem 'mini_magick'
 gem 'multi_xml'
+gem 'rufo'
 gem 'ruby-pinyin'
 gem 'rucaptcha'
 

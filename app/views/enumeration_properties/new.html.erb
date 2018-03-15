@@ -1,0 +1,80 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @property %>
+  <%= form_for [@model, @property], url: model_enumeration_properties_path(@model, @property), html: { class: 'form-horizontal' } do |f| %>
+    <%= f.hidden_field :type, value: @property.type %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('enumeration_property') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.model_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @property.model.name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.type' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @property.type_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.localized_name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :localized_name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'property.name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :name, class: 'form-control' %>
+          </div>
+        </div>
+      </div>      
+      <div class="block-divider-text"><%= arm_t('enumeration_element') %></div>
+      <div class="block-content">
+        <% 10.times.each do |i| %>
+        <%= f.fields_for :elements, (@property.elements[i] or @property.elements.new) do |field| %>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">#<%= i + 1 %></label>
+          <div class="col-sm-2">
+            <%= field.text_field :name, placeholder: ara_t('enumeration_element.code'), class: 'form-control' %>
+          </div>
+          <div class="col-sm-2">
+            <%= field.text_field :localized_name, placeholder: ara_t('enumeration_element.localized_name'), class: 'form-control' %>
+          </div>
+          <div class="col-sm-2">
+            <%= field.text_field :name, placeholder: ara_t('enumeration_element.name'), class: 'form-control' %>
+          </div>
+        </div>
+        <% end %>
+        <% end %>
+      </div>
+      <div class="block-divider-text"><%= arm_t('common_validation') %></div>
+      <div class="block-content">
+        <%= f.fields_for :common_validation, @property.build_common_validation do |field| %>
+          <%= render 'common_validations/form', field: field %>
+        <% end %>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Create', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @model, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

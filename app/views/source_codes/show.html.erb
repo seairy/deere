@@ -1,0 +1,40 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Source Code</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <div class="block block-condensed">
+    <div class="app-heading app-heading-small">
+      <div class="title">
+        <h2 class="margin-bottom-0"><%= @source_code.file_name %></h2>
+      </div>
+    </div>
+    <div class="block-divider-text margin-top-0 margin-bottom-0">
+      <span class="fa fa-file-text-o"></span>
+      <%= number_to_human_size(@source_code.content.length) %> |
+      <%= @source_code.content.count("\n") + 1 %> lines
+    </div>
+    <%= text_area_tag :source_code_content, @source_code.content %>
+    <div class="block-footer">
+      <%= link_to 'Return', source_codes_path, class: 'btn btn-default' %>
+    </div>
+  </div>
+</div>
+<% content_for :javascript do %>
+  <script>
+    jQuery(document).ready(function() {
+      var editor = CodeMirror.fromTextArea(document.getElementById("source_code_content"), {
+        lineNumbers: true,
+        matchBrackets: true,
+        mode: "text/x-ruby",
+        indentUnit: 2,
+        indentWithTabs: false,
+        enterMode: "keep",
+        tabMode: "shift"                                                
+      });
+      editor.setSize('100%','500px');
+    });
+  </script>
+<% end %>

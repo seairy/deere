@@ -3,7 +3,7 @@ class CascadesController < ApplicationController
   before_action :find_model, only: %w(as_source as_destination create_as_source create_as_destination)
 
   def show
-    @available_models_for_cascade_redundancy = @cascade.source.owners(3).reject{|model| @cascade.redundancies.map(&:model_id).include?(model.id)}
+    @available_models_for_cascade_redundancy = @cascade.source.belongs(3).reject{|model| @cascade.redundancies.map(&:model_id).include?(model.id)}
   end
 
   def as_source
