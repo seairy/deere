@@ -1,4 +1,5 @@
 class Cascade < ApplicationRecord
+  include Fakeable
   extend Enumerize
   belongs_to :source, class_name: 'Model'
   belongs_to :destination, class_name: 'Model'
@@ -11,6 +12,10 @@ class Cascade < ApplicationRecord
   validates :action_when_owner_destroyed, presence: true
   validates :action_when_child_destroyed, presence: true
   validate :alias_must_be_provided_when_source_and_destination_are_both_exist
+
+  def source_name
+    source.name
+  end
 
   protected
     def alias_must_be_provided_when_source_and_destination_are_both_exist

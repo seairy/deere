@@ -1,2 +1,0 @@
-class TemplateElement < ApplicationRecord
-end

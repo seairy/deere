@@ -1,0 +1,43 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>R Controller</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <div class="block block-condensed">
+    <div class="app-heading">
+      <div class="title">
+        <h2>Sort <%= arm_t('form_element') %></h2>
+      </div>
+    </div>
+    <div class="block-content">
+      <div class="dd" id="nestable">
+        <ol class="dd-list">
+          <% @form_elements.each do |form_element| %>
+          <li class="dd-item" data-id="<%= form_element.id %>">
+            <div class="dd-handle"><i class="fa fa-circle text-danger margin-right-20"></i> <%= form_element.property.model.name %>#<%= form_element.property.name %></div>
+          </li>
+          <% end %>
+        </ol>
+      </div>
+    </div>
+    <div class="block-footer">
+      <%= link_to 'Finish', @form.formable, class: 'btn btn-default' %>
+    </div>
+  </div>
+</div>
+<% content_for :javascript do %>
+  <script>
+    jQuery(document).ready(function() {
+      $("#nestable").nestable().on('change', function() {
+        sorted_ids = $('#nestable').nestable('serialize').map(function(item, i) { return item.id }).join()
+        $.ajax({
+          url: '/forms/<%= @form.id %>/form_elements/sort',
+          method: 'PUT',
+          data: { form_element_ids: sorted_ids }
+        });
+      });
+    });
+  </script>
+<% end %>

@@ -13,6 +13,7 @@ class ModelsEngine < ApplicationEngine
       "class #{model.code.camelize} < ApplicationRecord\n" +
       [extensions(model),
         inclusions(model),
+        class_marcos(model),
         enumerations(model),
         associations(model),
         scopes(model),
@@ -36,6 +37,14 @@ class ModelsEngine < ApplicationEngine
         model.includes_classes.each do |class_name|
           result << "include #{class_name}"
         end
+        result << "include Trashable" if model.trashable.present?
+      end.join("\n")
+    end
+
+    def class_marcos
+      [].tap do |result|
+        result << "audited" if model.orm_loggable.present?
+        result << "attribute :password, :string" if model.authenticatable.present?
       end.join("\n")
     end
 
@@ -154,7 +163,15 @@ class ModelsEngine < ApplicationEngine
     end
 
     def class_methods model
-      ""
+      [].tap do |result|
+        if model.authenticatable.present?
+          result << "def self.authenticate(#{model.authenticatable.account_name}, password)"
+          result << "find_by(account: #{model.authenticatable.account_name}).tap do |#{model.code}|"
+          result << "raise AccountDoesNotExist.new if #{model.code}.blank?"
+          result << "raise IncorrectPassword.new if Digest::MD5.hexdigest(options[:password]) != #{model.code}.hashed_password"
+          result << "end"
+        end
+      end.join("\n")
     end
 
     def instance_methods model

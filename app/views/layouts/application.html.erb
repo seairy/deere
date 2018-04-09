@@ -24,17 +24,18 @@
               <li class="title">PRESENTATION</li>
               <%= nav 'Namespaces', 'Ns', { namespaces: :all }, namespaces_path %>
               <%= nav 'R Controllers', 'Rc', { resourceful_controllers: :all }, resourceful_controllers_path %>
-              <%= nav 'NR Controllers', 'Nc', { non_resourceful_controllers: :all }, '' %>
+              <%= nav 'NR Controllers', 'Nc', { non_resourceful_controllers: :all }, non_resourceful_controllers_path %>
             </ul>
             <ul>
-              <li class="title">ENGINE</li>
+              <li class="title">APPLICATION</li>
+              <%= nav 'Early Warning', 'Ew', { early_warnings: :all }, early_warnings_path %>
               <%= nav 'Source Codes', 'Sc', { source_codes: :all }, source_codes_path %>
             </ul>
             <ul>
               <li class="title">DOCUMENT</li>
               <%= nav 'Ruby Doc', 'Ru', {}, 'http://ruby-doc.org/core-2.5.0/', true %>
-              <%= nav 'Rails Doc', 'Ro', {}, 'http://api.rubyonrails.org/', true %>
-              <%= nav 'Rails Guide', 'Gu', {}, '' do %>
+              <%= nav 'Rails Doc', 'Ra', {}, 'http://api.rubyonrails.org/', true %>
+              <%= nav 'Rails Guide', 'Rg', {}, '' do %>
                 <li><%= link_to 'Active Record Basics', 'http://guides.rubyonrails.org/active_record_basics.html', target: '_blank' %></li>
                 <li><%= link_to 'Active Record Migrations', 'http://guides.rubyonrails.org/active_record_migrations.html', target: '_blank' %></li>
                 <li><%= link_to 'Routing', 'http://guides.rubyonrails.org/routing.html', target: '_blank' %></li>

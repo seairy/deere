@@ -1,0 +1,79 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>R Controllers</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <form class="form-horizontal">
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>Create <%= @form.formable.model.name %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <% @form_elements.each do |form_element| %>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= "#{form_element.property.model.name} " unless form_element.form.formable.model_id == form_element.property.model_id %><%= form_element.property.name %> <%= raw("<span class=\"required\">*</span>") if form_element.required? %></label>
+          <div class="col-sm-6">
+            <% case form_element %>
+            <% when TextField %>
+            <% case form_element.plugin %>
+            <% when "date" %>
+            <%= text_field_tag nil, form_element.property.fake_value, class: 'form-control bs-datepicker-custom' %>
+            <% when "time" %>
+            <%= text_field_tag nil, form_element.property.fake_value, class: 'form-control bs-timepicker' %>
+            <% when "datetime" %>
+            <%= text_field_tag nil, form_element.property.fake_value, class: 'form-control bs-datetimepicker-custom' %>
+            <% else %>
+            <%= text_field_tag nil, form_element.property.fake_value, class: 'form-control' %>
+            <% end %>
+            <% when TextArea %>
+            <%= text_area_tag nil, form_element.property.fake_value, class: 'form-control' %>
+            <% when Select %>
+            <%= select_tag nil, options_for_select(10.times.map{ [form_element.property.fake_value, nil] }.uniq), prompt: "<Select>", class: 'form-control s2-select' %>
+            <% when CheckBox %>
+            check_box
+            <% when RadioButton %>
+            <% 10.times.map{ form_element.property.fake_value }.compact.uniq.each do |value| %>
+            <div class="app-radio inline round">
+              <label><%= radio_button_tag nil, nil %> <%= value %></label>
+            </div>
+            <% end %>
+            <% when FileField %>
+            <%= file_field_tag nil, class: 'form-control' %>
+            <% when StaticTextField %>
+            <%= text_field_tag nil, form_element.property.fake_value, readonly: true, class: 'form-control' %>
+            <% when StaticTextArea %>
+            <%= text_area_tag nil, form_element.property.fake_value, rows: 6, readonly: true, class: 'form-control' %>
+            <% when ImagePreviewer %>
+            <%= link_to image_tag('imageholder.jpg', class: 'img-responsive img-thumbnail'), 'javascript:;', data: { 'preview-image': asset_url('imageholder.jpg'), 'preview-size': 'modal-lg' }, class: 'preview' %>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+      <div class="block-footer">
+        <% case @form.formable %>
+        <% when IndividualCreation %>
+        <button type="button" class="btn btn-primary">Create</button>
+        <% when IndividualUpdation %>
+        <button type="button" class="btn btn-primary">Update</button>
+        <% when RetrieveElement %>
+        <button type="button" class="btn btn-primary">Edit</button>
+        <button type="button" class="btn btn-danger">Destroy</button>
+        <button type="button" class="btn btn-default pull-right">Return</button>
+        <% end %>
+      </div>
+    </div>
+  </form>
+  <div class="modal fade" id="preview" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="icon-cross"></span></button>
+      <div class="modal-content">
+        <div class="modal-body"></div>
+      </div>
+    </div>
+  </div>
+</div>

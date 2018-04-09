@@ -1,0 +1,2 @@
+class ImageRow < FormElement
+end

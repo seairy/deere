@@ -1,0 +1,2 @@
+class PopoverColumn < TableElement
+end

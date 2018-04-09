@@ -22,7 +22,7 @@ module ApplicationHelper
   def nav name, abbr_name, controllers_and_actions = {}, url = nil, opens_in_a_new_window = false, &block
     actived = false
     controllers_and_actions.each do |controller, actions|
-      if ((controller.to_s == controller_name) & (actions == :all ? true : actions.map(&:to_s).include?(action_name)))
+      if ((controller.to_s == controller_name) and (actions == :all ? true : actions.map(&:to_s).include?(action_name)))
         actived = true
         break
       end
@@ -34,21 +34,38 @@ module ApplicationHelper
     end)
   end
 
-  def grouped_properties_of_model_with_cascades_options model
-    grouped_attributes_of_model_with_cascades_options(model, :property)
-  end
-
-  def grouped_presenters_of_model_with_cascades_options model
-    grouped_attributes_of_model_with_cascades_options(model, :presenter)
-  end
-
-  protected
-    def grouped_attributes_of_model_with_cascades_options model, type
-      grouped_options_for_select(([model] + model.belongs(3)).map do |model|
-        [model.name, case type
-                     when :property then model.properties.map{ |property| [property.name, property.id]}
-                     when :presenter then model.presenters.map{ |presenter| [presenter.name, presenter.id]}
-                     end]
+  def grouped_properties_for_table table, options = {}
+    options[:tier] ||= 3
+    table.elements.map(&:property_id).tap do |property_ids|
+      return grouped_options_for_select(([table.listable.model] + table.listable.model.belongs(options[:tier])).map do |model|
+        [model.name, model.properties.map{ |property| ["#{model.name}##{property.name}", property.id] unless property_ids.include?(property.id) }.compact]
+      end.reject do |grouped_options|
+        grouped_options[1].blank?
       end)
     end
+  end
+
+  def grouped_properties_for_form form, options = {}
+    options[:tier] ||= 3
+    form.elements.map(&:property_id).tap do |property_ids|
+      return grouped_options_for_select(([form.formable.model] + form.formable.model.belongs(options[:tier])).map do |model|
+        [model.name, model.properties.map{ |property| ["#{model.name}##{property.name}", property.id] unless property_ids.include?(property.id) }.compact]
+      end.reject do |grouped_options|
+        grouped_options[1].blank?
+      end)
+    end
+  end
+
+  def grouped_properties_for_table_filter_scope table_filter
+    table_filter.table.listable.model.tap do |model|
+      table_filter.scopes.map(&:property).compact.tap do |properties|
+        return grouped_options_for_select(([[model.name, model.properties.reject{ |property| property.is_a?(FileProperty) or property.is_a?(HashProperty) or property.type_array? }.map{ |property| ["#{model.name}##{property.name}", property.id] unless properties.map(&:id).include?(property.id) }.compact]] +
+          model.belongs(1).map do |model|
+            [model.name, model.properties.reject{ |property| property.is_a?(FileProperty) or property.is_a?(HashProperty) or property.type_array? }.map{ |property| ["#{model.name}##{property.name}", property.id] unless properties.map(&:model_id).include?(property.model_id) }.compact]
+          end).reject do |grouped_options|
+            grouped_options[1].blank?
+          end)
+      end
+    end
+  end
 end

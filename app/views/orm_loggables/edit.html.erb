@@ -24,7 +24,7 @@
           <label class="col-sm-3 control-label"><%= ara_t 'orm_loggable.on_create' %> <span class="required">*</span></label>
           <div class="col-sm-6">
             <div class="app-radio inline round">
-              <label><%= f.radio_button :on_create, true, checked: true %> Yes</label>
+              <label><%= f.radio_button :on_create, true %> Yes</label>
             </div>
             <div class="app-radio inline round">
               <label><%= f.radio_button :on_create, false %> No</label>
@@ -35,7 +35,7 @@
           <label class="col-sm-3 control-label"><%= ara_t 'orm_loggable.on_update' %> <span class="required">*</span></label>
           <div class="col-sm-6">
             <div class="app-radio inline round">
-              <label><%= f.radio_button :on_update, true, checked: true %> Yes</label>
+              <label><%= f.radio_button :on_update, true %> Yes</label>
             </div>
             <div class="app-radio inline round">
               <label><%= f.radio_button :on_update, false %> No</label>
@@ -46,7 +46,7 @@
           <label class="col-sm-3 control-label"><%= ara_t 'orm_loggable.on_destroy' %> <span class="required">*</span></label>
           <div class="col-sm-6">
             <div class="app-radio inline round">
-              <label><%= f.radio_button :on_destroy, true, checked: true %> Yes</label>
+              <label><%= f.radio_button :on_destroy, true %> Yes</label>
             </div>
             <div class="app-radio inline round">
               <label><%= f.radio_button :on_destroy, false %> No</label>
@@ -60,7 +60,7 @@
               <label><%= f.radio_button :comment_required, true %> Yes</label>
             </div>
             <div class="app-radio inline round">
-              <label><%= f.radio_button :comment_required, false, checked: true %> No</label>
+              <label><%= f.radio_button :comment_required, false %> No</label>
             </div>
           </div>
         </div>

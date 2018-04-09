@@ -1,0 +1,119 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>R Controllers</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <% if @table.filter.present? and @table.filter.scopes.present? %>
+  <form class="form-horizontal">
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>Filter</h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <% @table.filter.scopes.each do |table_filter_scope| %>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">
+            <% if @table.listable.model_id == table_filter_scope.property.model_id %>
+            <%= table_filter_scope.property.name %>
+            <% else %>
+            <%= table_filter_scope.property.model.name %>
+            <% end %>
+          </label>
+          <% case table_filter_scope.style %>
+          <% when :text_search %>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, table_filter_scope.property.fake_value, class: 'form-control' %>
+          </div>
+          <% when :text_range %>
+          <div class="col-sm-3">
+            <div class="input-group">
+              <span class="input-group-addon">MIN</span>
+              <%= text_field_tag nil, table_filter_scope.property.fake_value, class: 'form-control' %>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="input-group">
+              <span class="input-group-addon">MAX</span>
+              <%= text_field_tag nil, table_filter_scope.property.fake_value, class: 'form-control' %>
+            </div>
+          </div>
+          <% when :datetime_range %>
+          <div class="col-sm-3">
+            <%= text_field_tag nil, table_filter_scope.property.fake_value, class: 'form-control bs-datetimepicker-custom' %>
+          </div>
+          <div class="col-sm-3">
+            <%= text_field_tag nil, table_filter_scope.property.fake_value, class: 'form-control bs-datetimepicker-custom' %>
+          </div>
+          <% when :date_range %>
+          <div class="col-sm-3">
+            <%= text_field_tag nil, table_filter_scope.property.fake_value, class: 'form-control bs-datepicker-custom' %>
+          </div>
+          <div class="col-sm-3">
+            <%= text_field_tag nil, table_filter_scope.property.fake_value, class: 'form-control bs-datepicker-custom' %>
+          </div>
+          <% when :time_range %>
+          <div class="col-sm-3">
+            <%= text_field_tag nil, table_filter_scope.property.fake_value, class: 'form-control bs-timepicker' %>
+          </div>
+          <div class="col-sm-3">
+            <%= text_field_tag nil, table_filter_scope.property.fake_value, class: 'form-control bs-timepicker' %>
+          </div>
+          <% when :select %>
+          <div class="col-sm-6">
+            <%= select_tag nil, options_for_select(10.times.map{ [table_filter_scope.property.fake_value, nil] }.compact.uniq), prompt: "<ALL>", class: 'form-control s2-select' %>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+      </div>
+      <div class="block-footer">
+        <button type="button" class="btn btn-primary">Apply</button>
+      </div>
+    </div>
+  </form>
+  <% end %>
+  <div class="block block-condensed">
+    <div class="app-heading app-heading-small">
+      <div class="title">
+        <h2><%= @table.listable.model.name %> List</h2>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-head-light margin-bottom-0">
+        <thead>
+          <tr>
+            <% @table.elements.sorted.each do |table_element| %>
+            <th><%= "#{table_element.property.model.name} " unless @table.listable.model_id == table_element.property.model_id %><%= table_element.property.name %></th>
+            <% end %>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% 30.times do %>
+          <tr>
+            <% @table.elements.sorted.each do |table_element| %>
+            <td>
+              <% case table_element %>
+              <% when RegularColumn %>
+              <%= table_element.property.fake_value %>
+              <% when PopoverColumn %>
+              <button class="btn btn-default btn-sm popover-hover" data-placement="top" data-container="body" data-trigger="click" data-content="<%= table_element.property.fake_value %>">View</button>
+              <% end %>
+            </td>
+            <% end %>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% if @table.pagination.present? %>
+    <div class="block-footer">
+      <nav><ul class="pagination"><li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li><li class="active"><a href="#">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li><li><a href="#">4</a></li><li><a href="#">5</a></li><li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li></ul></nav>
+    </div>
+    <% end %>
+  </div>
+</div>

@@ -1,9 +1,12 @@
 class IndividualCreationsController < ApplicationController
-  before_action :find_individual_creation, only: %w(edit update destroy)
+  before_action :find_individual_creation, only: %w(show edit update destroy)
   before_action :find_resourceful_controller, only: %w(new create)
 
+  def show
+  end
+
   def new
-    @individual_creation = @resourceful_controller.build_individual_creation
+    @individual_creation = @resourceful_controller.build_individual_creation(confirmable: false)
   end
 
   def edit
@@ -12,7 +15,7 @@ class IndividualCreationsController < ApplicationController
   def create
     @individual_creation = @resourceful_controller.build_individual_creation(individual_creation_params)
     if @individual_creation.save
-      redirect_to @resourceful_controller, notice: notice_sentence
+      redirect_to @individual_creation, notice: notice_sentence
     else
       render action: 'new'
     end
@@ -20,7 +23,7 @@ class IndividualCreationsController < ApplicationController
 
   def update
     if @individual_creation.update(individual_creation_params)
-      redirect_to @individual_creation.resourceful_controller, notice: notice_sentence
+      redirect_to @individual_creation, notice: notice_sentence
     else
       render action: 'edit'
     end

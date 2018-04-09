@@ -1,0 +1,2 @@
+class BooleanFormatter < Formatter
+end

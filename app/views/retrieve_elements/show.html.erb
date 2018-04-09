@@ -1,0 +1,79 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>R Controllers</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= styled_flash %>
+  <form class="form-horizontal">
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>View <%= arm_t('retrieve_element') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'retrieve_element.resourceful_controller' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @retrieve_element.resourceful_controller.human, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'retrieve_element.type' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @retrieve_element.type_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= link_to 'Destroy', @retrieve_element, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <%= link_to 'Return', @retrieve_element.resourceful_controller, class: 'btn btn-default pull-right' %>
+      </div>
+    </div>
+    <% @retrieve_element.forms.each do |form| %>
+    <%= render "forms/show", form: form %>
+    <% end %>
+    <% @retrieve_element.tables.each do |table| %>
+    <%= render "tables/show", table: table %>
+    <% end %>
+    <% if @unactivated_models_as_form.present? or @unactivated_models_as_table.present? %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small margin-top-0">
+        <div class="title">
+          <h2>Unactivated Model</h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <% @unactivated_models_as_form.each do |model| %>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= model.name %></label>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <%= text_field_tag nil, "Form", readonly: true, class: 'form-control' %>
+              <span class="input-group-btn">
+                <%= link_to "Enable", new_retrieve_element_form_path(@retrieve_element, model_id: model.id), class: 'btn btn-default' %>
+              </span>
+            </div>
+          </div>
+        </div>
+        <% end %>
+        <% @unactivated_models_as_table.each do |model| %>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= model.name %></label>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <%= text_field_tag nil, "Table", readonly: true, class: 'form-control' %>
+              <span class="input-group-btn">
+                <%= link_to "Enable", retrieve_element_tables_path(@retrieve_element, model_id: model.id), method: :post, class: 'btn btn-default' %>
+              </span>
+            </div>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+    <% end %>
+  </form>
+</div>

@@ -18,36 +18,24 @@
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'text_field.property' %> <span class="required">*</span></label>
           <div class="col-sm-6">
-            <%= f.collection_select :property_id, @form.view_logic.model.properties, :id, :name, { prompt: '<Select Property>' }, class: 'form-control s2-select' %>
+            <%= f.select :property_id, grouped_properties_for_form(@form), { prompt: '<Select>' }, class: 'form-control s2-select' %>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'text_field.name' %></label>
-          <div class="col-sm-6">
-            <%= f.text_field :name, class: 'form-control' %>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'text_field.localized_name' %></label>
-          <div class="col-sm-6">
-            <%= f.text_field :localized_name, class: 'form-control' %>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'text_field.read_only' %></label>
+          <label class="col-sm-3 control-label"><%= ara_t 'text_field.required' %> <span class="required">*</span></label>
           <div class="col-sm-6">
             <div class="app-radio inline round">
-              <label><%= f.radio_button :read_only, true %> Yes</label>
+              <label><%= f.radio_button :required, true %> Yes</label>
             </div>
             <div class="app-radio inline round">
-              <label><%= f.radio_button :read_only, false %> No</label>
+              <label><%= f.radio_button :required, false %> No</label>
             </div>
           </div>
         </div>
       </div>
       <div class="block-footer">
         <%= f.submit 'Create', class: 'btn btn-primary' %>
-        <%= link_to 'Return', @form, class: 'pull-right btn btn-default' %>
+        <%= link_to 'Return', @form.formable, class: 'pull-right btn btn-default' %>
       </div>
     </div>
   <% end %>

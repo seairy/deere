@@ -5,6 +5,7 @@ class CreateNamespaces < ActiveRecord::Migration[5.1]
       t.string :name, limit: 100, null: false
       t.string :module, limit: 100, null: false
       t.string :path, limit: 100, null: false
+      t.string :theme, limit: 50, null: false
       t.timestamps
     end
   end

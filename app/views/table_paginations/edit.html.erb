@@ -1,6 +1,6 @@
 <div class="app-heading app-heading-bordered app-heading-page">
   <div class="title">
-    <h1>Models</h1>
+    <h1>R Controller</h1>
     <p><%= @page_metadata %></p>
   </div>
 </div>
@@ -23,7 +23,7 @@
       </div>
       <div class="block-footer">
         <%= f.submit 'Update', class: 'btn btn-primary' %>
-        <%= link_to 'Return', @table_pagination.table, class: 'pull-right btn btn-default' %>
+        <%= link_to 'Return', @table_pagination.table.listable, class: 'pull-right btn btn-default' %>
       </div>
     </div>
   <% end %>

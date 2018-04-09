@@ -21,7 +21,6 @@
           <tr>
             <th><%= ara_t 'resourceful_controller.namespace' %></th>
             <th><%= ara_t 'resourceful_controller.model' %></th>
-            <th><%= ara_t 'resourceful_controller.type' %></th>
             <th></th>
           </tr>
         </thead>
@@ -30,7 +29,6 @@
           <tr>
             <td><%= resourceful_controller.namespace.name %></td>
             <td><%= resourceful_controller.model.name %></td>
-            <td><%= arm_t(resourceful_controller.model_name.human) %></td>
             <td class="actions">
               <%= link_to raw('<i class="fa fa-file-text-o"></i>'), resourceful_controller_path(resourceful_controller), class: 'btn btn-default btn-icon' %>
             </td>

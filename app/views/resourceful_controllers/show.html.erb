@@ -3,24 +3,6 @@
     <h1>Models</h1>
     <p><%= @page_metadata %></p>
   </div>
-  <div class="heading-elements">
-    <div class="btn-group pull-right">
-      <button type="button" class="btn btn-default">New</button>
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu">
-        <li><%= link_to 'Retrieve Collection', '' %></li>
-        <li><%= link_to 'Retrieve Element', '' %></li>
-        <li><%= link_to 'Individual Creation', new_resourceful_controller_individual_creation_path(@resourceful_controller) %></li>
-        <li><%= link_to 'Individual Updation', '' %></li>
-        <li><%= link_to 'Individual Deletion', '' %></li>
-        <li><%= link_to 'Bulk Creation', '' %></li>
-        <li><%= link_to 'Bulk Updation', '' %></li>
-        <li><%= link_to 'Bulk Deletion', '' %></li>
-      </ul>
-    </div>
-  </div>
 </div>
 <div class="container">
   <%= styled_flash %>
@@ -44,19 +26,6 @@
             <%= text_field_tag nil, @resourceful_controller.model.name, readonly: true, class: 'form-control' %>
           </div>
         </div>
-        <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'resourceful_controller.individual_creation' %></label>
-          <div class="col-sm-6">
-            <div class="input-group">
-              <%= text_field_tag nil, boolean_formatter(@resourceful_controller.individual_creation.present?), readonly: true, class: 'form-control' %>
-              <% if @resourceful_controller.individual_creation.blank? %>
-              <span class="input-group-btn">
-                <%= link_to raw('<i class="fa fa-plus"></i>'), new_resourceful_controller_individual_creation_path(@resourceful_controller), class: 'btn btn-default' %>
-              </span>
-              <% end %>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="block-footer">
         <%= link_to 'Destroy', @resourceful_controller, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
@@ -64,4 +33,145 @@
       </div>
     </div>
   </form>
+  <div class="block block-condensed">
+    <div class="app-heading">
+      <div class="title">
+        <h2><%= arm_t('Logic') %> List</h2>
+      </div>
+    </div>
+    <% if @resourceful_controller.retrieve_collections.present? or @resourceful_controller.retrieve_element.present? or @resourceful_controller.individual_creation.present? or @resourceful_controller.individual_updations.present? or @resourceful_controller.individual_deletion.present?# or @resourceful_controller.bulk_creations.present? or @resourceful_controller.bulk_updations.present? or @resourceful_controller.bulk_deletions.present? %>
+    <div class="table-responsive">
+      <table class="table table-head-light margin-bottom-0">
+        <thead>
+          <tr>
+            <th><%= ara_t 'view_logic.type' %></th>
+            <th><%= ara_t 'view_logic.metadata' %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @resourceful_controller.retrieve_collections.each do |retrieve_collection| %>
+          <tr>
+            <td>Retrieve Collection<br /><%= retrieve_collection.type_text %></td>
+            <td>
+              <label class="label label-default">Action: <%= retrieve_collection.action_name %></label>
+            </td>
+            <td class="actions">
+              <%= link_to raw('<i class="fa fa-file-text-o"></i>'), retrieve_collection, class: 'btn btn-default btn-icon' %>
+            </td>
+          </tr>
+          <% end %>
+          <% if (retrieve_element = @resourceful_controller.retrieve_element).present? %>
+          <tr>
+            <td>Retrieve Element<br /><%= retrieve_element.type_text %></td>
+            <td></td>
+            <td class="actions">
+              <%= link_to raw('<i class="fa fa-file-text-o"></i>'), retrieve_element, class: 'btn btn-default btn-icon' %>
+            </td>
+          </tr>
+          <% end %>
+          <% if (individual_creation = @resourceful_controller.individual_creation).present? %>
+          <tr>
+            <td>Individual Creation<br /><%= individual_creation.type_text %></td>
+            <td>
+              <% if individual_creation.nested_model_as_parent.present? %>
+              <label class="label label-default">Parent: <%= individual_creation.nested_model_as_parent.name %></label>
+              <% end %>
+              <% if individual_creation.confirmable? %>
+              <label class="label label-default">Confirmable</label>
+              <% end %>
+            </td>
+            <td class="actions">
+              <%= link_to raw('<i class="fa fa-file-text-o"></i>'), individual_creation, class: 'btn btn-default btn-icon' %>
+            </td>
+          </tr>
+          <% end %>
+          <% @resourceful_controller.individual_updations.each do |individual_updation| %>
+          <tr>
+            <td>Individual Update<br /><%= individual_updation.type_text %></td>
+            <td>
+              <label class="label label-default">Frontend: <%= individual_updation.frontend_action_name %></label>
+              <label class="label label-default">Backend: <%= individual_updation.backend_action_name %> (<%= individual_updation.backend_action_method %>)</label>
+              <% if individual_updation.confirmable? %>
+              <label class="label label-default">Confirmable</label>
+              <% end %>
+            </td>
+            <td class="actions">
+              <%= link_to raw('<i class="fa fa-file-text-o"></i>'), individual_updation, class: 'btn btn-default btn-icon' %>
+            </td>
+          </tr>
+          <% end %>
+          <% if (individual_deletion = @resourceful_controller.individual_deletion).present? %>
+          <tr>
+            <td>Individual Deletion<br /><%= individual_deletion.type_text %></td>
+            <td>
+              <% if individual_deletion.confirmable? %>
+              <label class="label label-default">Confirmable</label>
+              <% end %>
+            </td>
+            <td class="actions">
+              <%= link_to raw('<i class="fa fa-file-text-o"></i>'), individual_deletion, class: 'btn btn-default btn-icon' %>
+            </td>
+          </tr>
+          <% end %>
+          <% @resourceful_controller.state_transitions.each do |state_transition| %>
+          <tr>
+            <td>State Transition<br /><%= state_transition.type_text %></td>
+            <td>
+              <label class="label label-default">Action Name: <%= state_transition.action_name %></label>
+              <label class="label label-default">Action Method: <%= state_transition.action_method_text %></label>
+              <% if state_transition.confirmable? %>
+              <label class="label label-default">Confirmable</label>
+              <% end %>
+            </td>
+            <td class="actions">
+              <%= link_to raw('<i class="fa fa-file-text-o"></i>'), state_transition, class: 'btn btn-default btn-icon' %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% end %>
+    <div class="block-footer">
+      <div class="btn-group dropup">
+        <button type="button" class="btn btn-default">New</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Retrieve Collection', new_resourceful_controller_retrieve_collection_path(@resourceful_controller) %></li>
+          <li>
+            <% if @resourceful_controller.retrieve_element.blank? %>
+            <%= link_to 'Retrieve Element', new_resourceful_controller_retrieve_element_path(@resourceful_controller) %>
+            <% else %>
+            <%= link_to raw('<span class="icon-warning"></span> Retrieve Element'), 'javascript:;', class: 'text-muted' %>
+            <% end %>
+          </li>
+          <li>
+            <% if @resourceful_controller.individual_creation.blank? %>
+            <%= link_to 'Individual Creation', new_resourceful_controller_individual_creation_path(@resourceful_controller) %>
+            <% else %>
+            <%= link_to raw('<span class="icon-warning"></span> Individual Creation'), 'javascript:;', class: 'text-muted' %>
+            <% end %>
+          </li>
+          <li><%= link_to 'Individual Updation', new_resourceful_controller_individual_updation_path(@resourceful_controller) %></li>
+          <li>
+            <% if @resourceful_controller.individual_deletion.blank? %>
+            <%= link_to 'Individual Deletion', new_resourceful_controller_individual_deletion_path(@resourceful_controller) %>
+            <% else %>
+            <%= link_to raw('<span class="icon-warning"></span> Individual Deletion'), 'javascript:;', class: 'text-muted' %>
+            <% end %>
+          </li>
+          <li>
+            <% if @resourceful_controller.model.state_machine.present? %>
+            <%= link_to 'State Transition', new_resourceful_controller_state_transition_path(@resourceful_controller) %>
+            <% else %>
+            <%= link_to raw('<span class="icon-warning"></span> State Transition'), 'javascript:;', class: 'text-muted' %>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

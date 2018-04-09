@@ -1,6 +1,6 @@
 <div class="app-heading app-heading-bordered app-heading-page">
   <div class="title">
-    <h1>Models</h1>
+    <h1>R Controller</h1>
     <p><%= @page_metadata %></p>
   </div>
 </div>
@@ -10,20 +10,20 @@
     <div class="block block-condensed">
       <div class="app-heading app-heading-small">
         <div class="title">
-          <h2>New <%= arm_t('table_pagination') %></h2>
+          <h2>Enable <%= arm_t('table_pagination') %></h2>
         </div>
       </div>
       <div class="block-content">
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'table_pagination.per_page' %> <span class="required">*</span></label>
           <div class="col-sm-6">
-            <%= f.text_field :per_page, value: alternative(@table_pagination.per_page, ApplicationConstant::DefaultTablePerPage), class: 'form-control' %>
+            <%= f.text_field :per_page, class: 'form-control' %>
           </div>
         </div>
       </div>
       <div class="block-footer">
-        <%= f.submit 'Create', class: 'btn btn-primary' %>
-        <%= link_to 'Return', @table, class: 'pull-right btn btn-default' %>
+        <%= f.submit 'Enable', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @table.listable, class: 'pull-right btn btn-default' %>
       </div>
     </div>
   <% end %>

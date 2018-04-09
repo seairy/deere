@@ -1,0 +1,2 @@
+class DatetimeFormatter < Formatter
+end

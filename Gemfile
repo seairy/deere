@@ -28,6 +28,7 @@ gem 'multi_xml'
 gem 'rufo'
 gem 'ruby-pinyin'
 gem 'rucaptcha'
+gem 'faker'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -36,7 +37,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.5'
   gem 'factory_bot_rails'
   gem 'spring-commands-rspec'
-  gem 'faker'
 end
 
 group :development do

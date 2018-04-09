@@ -1,0 +1,48 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>R Controllers</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= styled_flash %>
+  <form class="form-horizontal">
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>View <%= arm_t('individual_creation') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'individual_creation.resourceful_controller' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @individual_creation.resourceful_controller.human, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'individual_creation.type' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @individual_creation.type_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'individual_creation.nested_model_as_parent' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, (@individual_creation.nested_model_as_parent.try(:source_name) || "N/A"), readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'individual_creation.confirmable' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, boolean_formatter(@individual_creation.confirmable?), readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= link_to 'Destroy', @individual_creation, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <%= link_to 'Return', @individual_creation.resourceful_controller, class: 'btn btn-default pull-right' %>
+      </div>
+    </div>
+  </form>
+</div>

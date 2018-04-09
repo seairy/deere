@@ -1,0 +1,30 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>R Controller</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @table_filter_scope %>
+  <%= form_for [@table_filter, @table_filter_scope], html: { class: 'form-horizontal' } do |f| %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('table_filter_scope') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'table_filter_scope.property' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.select :property_id, grouped_properties_for_table_filter_scope(@table_filter), { prompt: "<Select>" }, class: 'form-control s2-select' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Create', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @table_filter.table.listable, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

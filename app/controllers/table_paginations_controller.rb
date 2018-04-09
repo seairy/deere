@@ -4,7 +4,7 @@ class TablePaginationsController < ApplicationController
   before_action :find_table_pagination, only: %w(edit update destroy)
   
   def new
-    @table_pagination = @table.build_pagination
+    @table_pagination = @table.build_pagination(per_page: ApplicationConstant::DefaultTablePerPage)
   end
   
   def edit
@@ -13,7 +13,7 @@ class TablePaginationsController < ApplicationController
   def create
     @table_pagination = @table.build_pagination(table_pagination_params)
     if @table_pagination.save
-      redirect_to @table, notice: notice_sentence
+      redirect_to @table.listable, notice: notice_sentence
     else
       render action: 'new'
     end
@@ -21,7 +21,7 @@ class TablePaginationsController < ApplicationController
   
   def update
     if @table_pagination.update(table_pagination_params)
-      redirect_to @table_pagination.table, notice: notice_sentence
+      redirect_to @table_pagination.table.listable, notice: notice_sentence
     else
       render action: 'edit'
     end
@@ -29,7 +29,7 @@ class TablePaginationsController < ApplicationController
 
   def destroy
     @table_pagination.destroy!
-    redirect_to @table_pagination.table, notice: notice_sentence
+    redirect_to @table_pagination.table.listable, notice: notice_sentence
   end
 
   protected

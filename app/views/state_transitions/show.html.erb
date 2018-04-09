@@ -1,0 +1,54 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>R Controllers</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= styled_flash %>
+  <form class="form-horizontal">
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>View <%= arm_t('state_transition') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'state_transition.resourceful_controller' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @state_transition.resourceful_controller.human, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'state_transition.type' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @state_transition.type_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'state_transition.action_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @state_transition.action_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'state_transition.action_method' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @state_transition.action_method_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'state_transition.confirmable' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, boolean_formatter(@state_transition.confirmable?), readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= link_to 'Destroy', @state_transition, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <%= link_to 'Return', @state_transition.resourceful_controller, class: 'btn btn-default pull-right' %>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,5 +1,8 @@
 class IndividualCreation < ApplicationRecord
-  belongs_to :controller
-  has_one :new_page, as: :renderable, dependent: :destroy
-  has_one :confirm_page, as: :renderable, dependent: :destroy
+  include Presentable
+  extend Enumerize
+  enumerize :type, in: %w(regular), predicates: { prefix: true }, scope: true
+  belongs_to :resourceful_controller
+  belongs_to :nested_model_as_parent, class_name: "Cascade", optional: true
+  validates :confirmable, inclusion: { in: [true, false] }
 end

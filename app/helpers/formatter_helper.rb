@@ -4,7 +4,12 @@ module FormatterHelper
   end
 
   def number_formatter number, options = {}
-    number
+    sign = '+' if options[:include_sign] and quantity > 0
+    placeholder = options[:placeholder] || 'N/A'
+    precision = options[:precision] || 2
+    strip_insignificant_zeros = options[:strip_insignificant_zeros] || true
+    delimiter = options[:delimiter] || ','
+    number.blank? ? placeholder : "#{sign}#{number_with_precision(number, precision: precision, strip_insignificant_zeros: strip_insignificant_zeros, delimiter: delimiter)}" 
   end
 
   def boolean_formatter boolean, options = {}

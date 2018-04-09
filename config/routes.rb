@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
+  # ******************************************************** #
   root to: 'models#index'
   get :diagram, to: 'diagram#index', as: :diagram
+  # ******************************************************** #
+
+  # ******************************************************** #
   resources :models do
     resources :submodels, shallow: true
     resources :cascades, shallow: true do
@@ -76,6 +80,9 @@ Rails.application.routes.draw do
     resources :absence_validations, shallow: true
     resources :uniqueness_validations, shallow: true
   end
+  # ******************************************************** #
+
+  # ******************************************************** #
   resources :namespaces
   resources :resourceful_controllers do
     resources :retrieve_collections, only: %w(new create)
@@ -83,29 +90,64 @@ Rails.application.routes.draw do
     resources :individual_creations, only: %w(new create)
     resources :individual_updations, only: %w(new create)
     resources :individual_deletions, only: %w(new create)
+    resources :state_transitions, only: %w(new create)
     resources :bulk_creations, only: %w(new create)
     resources :bulk_updations, only: %w(new create)
     resources :bulk_deletions, only: %w(new create)
   end
-  resources :tables do
-    resources :table_paginations, only: %w(new create)
-    resources :table_columns, only: %w(new create)
+  resources :non_resourceful_controllers
+  resources :retrieve_collections, only: %w(show destroy)
+  resources :retrieve_elements, only: %w(show destroy) do
+    resources :forms, only: %w(create)
+    resources :tables, only: %w(create)
   end
-  resources :table_columns, only: %w(edit update destroy)
+  resources :state_transitions, only: %w(show destroy)
+  resources :individual_creations, only: %w(show destroy)
+  resources :individual_updations, only: %w(show destroy)
+  resources :individual_deletions, only: %w(show destroy)
+  # ******************************************************** #
+
+  # ******************************************************** #
+  resources :forms, only: %w(destroy) do
+    resources :form_elements, only: %w() do
+      collection do
+        match "sort", via: %w(get put)
+      end
+    end
+    resources :regular_rows, only: %w(new create)
+    resources :image_rows, only: %w(new create)
+    member do
+      get :demonstration
+    end
+  end
+  resources :regular_rows, only: %w(edit update destroy)
+  resources :image_rows, only: %w(edit update destroy)
+  resources :tables, only: %w(destroy) do
+    resources :table_elements, only: %w() do
+      collection do
+        match "sort", via: %w(get put)
+      end
+    end
+    resources :regular_columns, only: %w(new create)
+    resources :popover_columns, only: %w(new create)
+    resource :table_paginations, only: %w(new create)
+    resource :table_filters, only: %w(create)
+    member do
+      get :demonstration
+    end
+  end
+  resources :regular_columns, only: %w(edit update destroy)
+  resources :popover_columns, only: %w(edit update destroy)
   resources :table_paginations, only: %w(edit update destroy)
-  resources :forms do
-    resources :text_fields, only: %w(new create)
-    resources :selects, only: %w(new create)
-    resources :text_areas, only: %w(new create)
-    resources :radio_buttons, only: %w(new create)
-    resources :checkboxes, only: %w(new create)
+  resources :table_paginations, only: %w(edit update destroy)
+  resources :table_filters, only: %w(edit update destroy) do
+    resources :table_filter_scopes, only: %w(new create)
   end
-  resources :form_groups
-  resources :text_fields, only: %w(edit update destroy)
-  resources :selects, only: %w(edit update destroy)
-  resources :text_areas, only: %w(edit update destroy)
-  resources :radio_buttons, only: %w(edit update destroy)
-  resources :checkboxes, only: %w(edit update destroy)
+  resources :table_filter_scopes, only: %w(destroy)
+  # ******************************************************** #
+
+  # ******************************************************** #
+  resources :early_warnings
   resources :source_codes do
     collection do
       post :compile
@@ -115,4 +157,5 @@ Rails.application.routes.draw do
   get :sign_in, to: 'sessions#new', as: :sign_in
   post :sign_in, to: 'sessions#create'
   get :sign_out, to: 'sessions#destroy', as: :sign_out
+  # ******************************************************** #
 end

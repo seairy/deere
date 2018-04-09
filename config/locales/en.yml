@@ -279,3 +279,5 @@ en:
         en_name: Name in English
       serialized_hash:
         name: Name
+      form_element:
+        attributable: Property / Presenter

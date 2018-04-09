@@ -1,0 +1,105 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>R Controllers</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= styled_flash %>
+  <form class="form-horizontal">
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>View <%= arm_t('retrieve_collection') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'retrieve_collection.resourceful_controller' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @retrieve_collection.resourceful_controller.human, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'retrieve_collection.type' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @retrieve_collection.type_text, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'retrieve_collection.action_name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @retrieve_collection.action_name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= link_to 'Destroy', @retrieve_collection, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <%= link_to 'Return', @retrieve_collection.resourceful_controller, class: 'btn btn-default pull-right' %>
+      </div>
+    </div>
+    <%= render "tables/show", table: @retrieve_collection.table %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small margin-top-0">
+        <div class="title">
+          <h2>Pagination</h2>
+        </div>
+      </div>
+      <% if @retrieve_collection.table.pagination.present? %>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'table_pagination.per_page' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @retrieve_collection.table.pagination.per_page, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <% end %>
+      <div class="block-footer">
+        <% if @retrieve_collection.table.pagination.blank? %>
+        <%= link_to "Enable", new_table_table_paginations_path(@retrieve_collection.table), class: 'btn btn-primary' %>
+        <% else %>
+        <%= link_to "Edit", edit_table_pagination_path(@retrieve_collection.table.pagination), class: 'btn btn-primary' %>
+        <%= link_to "Disable", @retrieve_collection.table.pagination, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <% end %>
+      </div>
+    </div>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small margin-top-0">
+        <div class="title">
+          <h2>Filter</h2>
+        </div>
+      </div>
+      <% if @retrieve_collection.table.filter.present? %>
+      <div class="table-responsive">
+        <table class="table table-head-light margin-bottom-0">
+          <thead>
+            <tr>
+              <th><%= ara_t 'table_filter_scope.property' %></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @retrieve_collection.table.filter.scopes.each do |table_filter_scope| %>
+            <tr>
+              <td><%= table_filter_scope.property.model.name %>#<%= table_filter_scope.property.name %></td>
+              <td class="actions">
+                <%= link_to raw('<i class="fa fa-times"></i>'), table_filter_scope, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-icon' %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% end %>
+      <div class="block-footer">
+        <% if @retrieve_collection.table.filter.blank? %>
+        <%= link_to "Enable", table_table_filters_path(@retrieve_collection.table), method: :post, class: 'btn btn-primary' %>
+        <% else %>
+        <%= link_to "New Item", new_table_filter_table_filter_scope_path(@retrieve_collection.table.filter), class: 'btn btn-primary' %>
+        <%= link_to "Disable", @retrieve_collection.table.filter, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <% end %>
+      </div>
+    </div>
+  </form>
+</div>

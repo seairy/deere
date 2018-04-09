@@ -1,0 +1,2 @@
+class RegularRow < FormElement
+end
