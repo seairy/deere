@@ -3,7 +3,8 @@ class ModelsEngine < ApplicationEngine
   def compile
     @project.models.each do |model|
       @project.source_codes.create!(prefix: ["app", "models"],
-        file_name: "#{model.code}.rb",
+        file_name: "#{model.code}",
+        extension: "rb",
         content: content_for(model))
     end
   end
@@ -16,10 +17,11 @@ class ModelsEngine < ApplicationEngine
         class_marcos(model),
         enumerations(model),
         associations(model),
+        callbacks(model),
         scopes(model),
         validations(model),
         class_methods(model),
-        instance_methods(model)].join("\n") +
+        instance_methods(model)].reject { |statement_group| statement_group.blank? } .join("\n") + "\n" +
       "end"
     end
 
@@ -41,7 +43,7 @@ class ModelsEngine < ApplicationEngine
       end.join("\n")
     end
 
-    def class_marcos
+    def class_marcos model
       [].tap do |result|
         result << "audited" if model.orm_loggable.present?
         result << "attribute :password, :string" if model.authenticatable.present?
@@ -97,12 +99,25 @@ class ModelsEngine < ApplicationEngine
       end.join("\n")
     end
 
+    def callbacks model
+      [].tap do |result|
+        if model.authenticatable.present?
+          result << "before_create :set_salt"
+          result << "before_create :hashing_password"
+        end
+      end.join("\n")
+    end
+
     def scopes model
       ""
     end
 
     def validations model
       [].tap do |result|
+        if model.authenticatable.present?
+          result << "validates :account, presence: true, length: { in: 4..16 }, uniqueness: true, format: { with: /\A[A-Za-z0-9_]+\z/, message: :only_allow_alphabeticnumeric_characters_and_underline }, on: :create"
+          result << "validates :password, presence: true, confirmation: true, length: { in: 6..16 }, format: { with: /\A[A-Za-z0-9!@#$%^&*()-=_+,.?]+\z/, message: :only_allow_alphabeticnumeric_characters_and_symbols }, on: :create"
+        end
         model.properties.each do |property|
           result << ([].tap do |line|
             line << "validates :#{property.code}"
@@ -168,13 +183,23 @@ class ModelsEngine < ApplicationEngine
           result << "def self.authenticate(#{model.authenticatable.account_name}, password)"
           result << "find_by(account: #{model.authenticatable.account_name}).tap do |#{model.code}|"
           result << "raise AccountDoesNotExist.new if #{model.code}.blank?"
-          result << "raise IncorrectPassword.new if Digest::MD5.hexdigest(options[:password]) != #{model.code}.hashed_password"
+          result << "raise IncorrectPassword.new if Digest::SHA256.hexdigest(\"\#{salt}\#{options[:password]}\") != #{model.code}.hashed_password"
+          result << "end"
           result << "end"
         end
       end.join("\n")
     end
 
     def instance_methods model
-      ""
+      [].tap do |result|
+        if model.authenticatable.present?
+          result << "def set_salt"
+          result << "self.salt = SecureRandom.base64"
+          result << "end"
+          result << "def hashing_password"
+          result << "self.hashed_password = Digest::SHA256.hexdigest(\"\#{salt}\#{password}\")"
+          result << "end"
+        end
+      end
     end
 end

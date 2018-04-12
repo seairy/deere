@@ -16,11 +16,11 @@ class Model < ApplicationRecord
   has_many :cascades_as_source, class_name: 'Cascade', foreign_key: 'source_id', dependent: :destroy
   has_many :cascades_as_destination, class_name: 'Cascade', foreign_key: 'destination_id', dependent: :destroy
   has_many :custom_validations, dependent: :destroy
+  has_many :namespaces, foreign_key: "authenticator_id", dependent: :restrict_with_exception
   validates :project, presence: true
   validates :includes_classes, length: { maximum: 1000 }
   validates :extends_classes, length: { maximum: 1000 }
   validates :code, presence: true, length: { maximum: 100 }, uniqueness: { scope: :project }, code: true
-  validates :localized_name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :project }
   validates :name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :project }
 
   def cascade_ids

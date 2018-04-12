@@ -27,9 +27,15 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'state_transition.action_name' %> <span class="required">*</span></label>
+          <label class="col-sm-3 control-label"><%= ara_t 'state_transition.state_machine_event' %> <span class="required">*</span></label>
           <div class="col-sm-6">
-            <%= f.text_field :action_name, class: 'form-control' %>
+            <%= f.collection_select :state_machine_event_id, @resourceful_controller.model.state_machine.events, :id, :code, {}, class: 'form-control s2-select' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'state_transition.action_code' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :action_code, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">

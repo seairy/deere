@@ -6,7 +6,7 @@ class StateTransitionsController < ApplicationController
   end
 
   def new
-    @state_transition = @resourceful_controller.state_transitions.new(confirmable: false)
+    @state_transition = @resourceful_controller.state_transitions.new(action_method: :patch, confirmable: false)
   end
 
   def edit

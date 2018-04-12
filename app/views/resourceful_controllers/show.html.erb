@@ -54,7 +54,7 @@
           <tr>
             <td>Retrieve Collection<br /><%= retrieve_collection.type_text %></td>
             <td>
-              <label class="label label-default">Action: <%= retrieve_collection.action_name %></label>
+              <label class="label label-default">Action: <%= retrieve_collection.action_code %></label>
             </td>
             <td class="actions">
               <%= link_to raw('<i class="fa fa-file-text-o"></i>'), retrieve_collection, class: 'btn btn-default btn-icon' %>
@@ -86,12 +86,10 @@
             </td>
           </tr>
           <% end %>
-          <% @resourceful_controller.individual_updations.each do |individual_updation| %>
+          <% if (individual_updation = @resourceful_controller.individual_updation).present? %>
           <tr>
-            <td>Individual Update<br /><%= individual_updation.type_text %></td>
+            <td>Individual Creation<br /><%= individual_updation.type_text %></td>
             <td>
-              <label class="label label-default">Frontend: <%= individual_updation.frontend_action_name %></label>
-              <label class="label label-default">Backend: <%= individual_updation.backend_action_name %> (<%= individual_updation.backend_action_method %>)</label>
               <% if individual_updation.confirmable? %>
               <label class="label label-default">Confirmable</label>
               <% end %>
@@ -118,7 +116,7 @@
           <tr>
             <td>State Transition<br /><%= state_transition.type_text %></td>
             <td>
-              <label class="label label-default">Action Name: <%= state_transition.action_name %></label>
+              <label class="label label-default">Action Name: <%= state_transition.action_code %></label>
               <label class="label label-default">Action Method: <%= state_transition.action_method_text %></label>
               <% if state_transition.confirmable? %>
               <label class="label label-default">Confirmable</label>
@@ -155,7 +153,13 @@
             <%= link_to raw('<span class="icon-warning"></span> Individual Creation'), 'javascript:;', class: 'text-muted' %>
             <% end %>
           </li>
-          <li><%= link_to 'Individual Updation', new_resourceful_controller_individual_updation_path(@resourceful_controller) %></li>
+          <li>
+            <% if @resourceful_controller.individual_updation.blank? %>
+            <%= link_to 'Individual Updation', new_resourceful_controller_individual_updation_path(@resourceful_controller) %>
+            <% else %>
+            <%= link_to raw('<span class="icon-warning"></span> Individual Updation'), 'javascript:;', class: 'text-muted' %>
+            <% end %>
+          </li>
           <li>
             <% if @resourceful_controller.individual_deletion.blank? %>
             <%= link_to 'Individual Deletion', new_resourceful_controller_individual_deletion_path(@resourceful_controller) %>

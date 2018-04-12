@@ -1,0 +1,54 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Namespaces</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @namespace %>
+  <%= form_for @namespace, html: { class: 'form-horizontal' } do |f| %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('namespace') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'namespace.authenticator' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.collection_select :authenticator_id, @current_project.models.select{ |model| model.authenticatable.present? }, :id, :name, {}, class: 'form-control s2-select' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'namespace.name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'namespace.module' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :module, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'namespace.path' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :path, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'namespace.theme' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.select :theme, Namespace.theme.options, {}, class: 'form-control s2-select' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Update', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @namespace, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

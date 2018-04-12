@@ -257,8 +257,6 @@ en:
     attributes:
       model:
         name: Name
-        zh_name: Name in Chinese
-        en_name: Name in English
         includes_classes: Includes classes
         extends_classes: Extends classes
         many_to_one_cascades: Many (One) to One
@@ -268,16 +266,10 @@ en:
       property:
         inheritance_type: STI Type
         name: Name
-        zh_name: Name in Chinese
-        en_name: Name in English
         i18n: I18N Name
         type: Type
         validations: Validations
       enumeration_element:
         name: Name
-        zh_name: Name in Chinese
-        en_name: Name in English
       serialized_hash:
         name: Name
-      form_element:
-        attributable: Property / Presenter

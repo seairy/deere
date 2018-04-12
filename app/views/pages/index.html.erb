@@ -21,7 +21,6 @@
           <tr>
             <th><%= ara_t 'page.namespace' %></th>
             <th><%= ara_t 'page.name' %></th>
-            <th><%= ara_t 'page.localized_name' %></th>
             <th></th>
           </tr>
         </thead>
@@ -30,7 +29,6 @@
           <tr>
             <td><%= page.namespace.name %></td>
             <td><%= page.name %></td>
-            <td><%= page.localized_name %></td>
             <td class="actions">
               <%= link_to raw('<i class="fa fa-file-text-o"></i>'), page_path(page, from: 'destination'), class: 'btn btn-default btn-icon' %>
             </td>

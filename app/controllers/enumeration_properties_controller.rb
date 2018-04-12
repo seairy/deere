@@ -41,9 +41,9 @@ class EnumerationPropertiesController < ApplicationController
     def fix_enumeration_elements
       enumeration_property_params[:elements_attributes].tap do |elements_attributes|
         elements_attributes.reject! do |id, elements_attribute|
-          elements_attribute[:code].blank? or elements_attribute[:localized_name].blank? or elements_attribute[:name].blank?
+          elements_attribute[:code].blank? or elements_attribute[:name].blank?
         end
-        %i(code name localized_name).each do |attribute_name|
+        %i(code name).each do |attribute_name|
           result = []
           elements_attributes.reject! do |id, elements_attribute|
             if result.include?(elements_attribute[attribute_name])

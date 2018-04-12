@@ -12,13 +12,31 @@ namespace :database do
   task populate: :environment do
     bench = Benchmark.measure do
       ActiveRecord::Base.transaction do
-        project = Project.create!(code: 'Okra').tap do |project|
-          brand = project.models.create!(code: 'brand', localized_name: '品牌', name: 'Brand').tap do |model|
+        project = Project.create!(code: 'Okra', name: 'Catering Management', copyright: '© DaoCloud LLC. 2016 - 2018. All rights reserved.', primary_language: :en).tap do |project|
+          administrator = project.models.create!(code: 'administrator', name: 'Administrator').tap do |model|
+            model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
+            model.create_authenticatable!(account_name: 'account')
+            model.regular_properties.tap do |regular_properties_association|
+              regular_properties_association.create!(code: 'name',
+                name: 'Name',
+                type: :string,
+                sculpture: false,
+                common_validation_attributes: {
+                  empty_tolerance: :not_allowed,
+                  on_actions: :all 
+                }
+              ).tap do |property|
+                property.create_presence_validation!
+                property.create_uniqueness_validation!
+                property.create_length_validation!(maximum: 100)
+              end
+            end
+          end
+          brand = project.models.create!(code: 'brand', name: 'Brand').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
             model.regular_properties.tap do |regular_properties_association|
               regular_properties_association.create!(code: 'name',
                 name: 'Name',
-                localized_name: '名称',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -32,12 +50,11 @@ namespace :database do
               end
             end
           end
-          province = project.models.create!(code: 'province', localized_name: '省市', name: 'Province').tap do |model|
+          province = project.models.create!(code: 'province', name: 'Province').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
             model.regular_properties.tap do |regular_properties_association|
               regular_properties_association.create!(code: 'name',
                 name: 'Name',
-                localized_name: '名称',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -51,12 +68,11 @@ namespace :database do
               end
             end
           end
-          city = project.models.create!(code: 'city', localized_name: '城市', name: 'City').tap do |model|
+          city = project.models.create!(code: 'city', name: 'City').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
             model.regular_properties.tap do |regular_properties_association|
               regular_properties_association.create!(code: 'name',
                 name: 'Name',
-                localized_name: '名称',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -70,12 +86,11 @@ namespace :database do
             end
           end
           Cascade.create!(source: province, destination: city, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing)
-          region = project.models.create!(code: 'region', localized_name: '地区', name: 'Region').tap do |model|
+          region = project.models.create!(code: 'region', name: 'Region').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
             model.regular_properties.tap do |regular_properties_association|
               regular_properties_association.create!(code: 'name',
                 name: 'Name',
-                localized_name: '名称',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -91,13 +106,26 @@ namespace :database do
           Cascade.create!(source: city, destination: region, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing).tap do |cascade|
             cascade.redundancies.create!(model: province)
           end
-          station = project.models.create!(code: 'station', localized_name: '工作站', name: 'Station').tap do |model|
+          station = project.models.create!(code: 'station', name: 'Station').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
             model.create_authenticatable!(account_name: 'domain')
+            model.create_state_machine!.tap do |state_machine|
+              buliding_state = state_machine.states.create!(code: 'building',
+                name: 'Buliding')
+              normal_state = state_machine.states.create!(code: 'normal',
+                name: 'Normal')
+              closed_state = state_machine.states.create!(code: 'closed',
+                name: 'Closed')
+              state_machine.events.create!(destination: normal_state, code: 'complete').tap do |state_machine_event|
+                state_machine_event.sources.create!(state_machine_state: buliding_state)
+              end
+              state_machine.events.create!(destination: closed_state, code: 'close').tap do |state_machine_event|
+                state_machine_event.sources.create!(state_machine_state: normal_state)
+              end
+            end
             model.regular_properties.tap do |regular_properties_association|
               regular_properties_association.create!(code: 'name',
                 name: 'Name',
-                localized_name: '名称',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -111,7 +139,6 @@ namespace :database do
               end
               model.file_properties.create!(code: 'image',
                 name: 'Image',
-                localized_name: '图片',
                 sculpture: false,
                 common_validation_attributes: {
                   empty_tolerance: :blank,
@@ -122,7 +149,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'address',
                 name: 'Address',
-                localized_name: '地址',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -135,7 +161,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'latitude',
                 name: 'Lat',
-                localized_name: '纬度',
                 type: :decimal,
                 precision: 8,
                 scale: 6,
@@ -150,7 +175,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'longitude',
                 name: 'Long',
-                localized_name: '经度',
                 type: :decimal,
                 precision: 9,
                 scale: 6,
@@ -165,7 +189,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'delivery_area',
                 name: 'Delivery Area',
-                localized_name: '配送范围',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -179,12 +202,17 @@ namespace :database do
             end
           end
           Cascade.create!(source: region, destination: station, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing)
-          platform = project.models.create!(code: 'platform', localized_name: '平台', name: 'Platform').tap do |model|
+          platform = project.models.create!(code: 'platform', name: 'Platform').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
+            model.create_state_machine!.tap do |state_machine|
+              state_machine.states.create!(code: 'closed',
+                name: 'Closed')
+              state_machine.states.create!(code: 'open',
+                name: 'Open')
+            end
             model.regular_properties.tap do |regular_properties_association|
               model.enumeration_properties.create!(code: 'type',
                 name: 'Type',
-                localized_name: '类型',
                 sculpture: false,
                 common_validation_attributes: {
                   empty_tolerance: :not_allowed,
@@ -193,14 +221,13 @@ namespace :database do
               ).tap do |property|
                 property.create_presence_validation!
                 property.elements.create!([
-                  { code: 'eleme', localized_name: '饿了么', name: 'Eleme' },
-                  { code: 'meituan', localized_name: '美团外卖', name: 'Meituan' },
-                  { code: 'baidu', localized_name: '百度外卖', name: 'Baidu' }
+                  { code: 'eleme', name: 'Eleme' },
+                  { code: 'meituan', name: 'Meituan' },
+                  { code: 'baidu', name: 'Baidu' }
                 ])
               end
               regular_properties_association.create!(code: 'account',
                 name: 'Account',
-                localized_name: '账号',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -214,7 +241,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'password',
                 name: 'Password',
-                localized_name: '密码',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -227,7 +253,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'mobile_number',
                 name: 'Mobile Number',
-                localized_name: '手机号',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -241,7 +266,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'url',
                 name: 'URL',
-                localized_name: '网址',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -258,12 +282,11 @@ namespace :database do
           end
           Cascade.create!(source: brand, destination: platform, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing)
           Cascade.create!(source: station, destination: platform, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing)
-          platform_order = project.models.create!(code: 'platform_order', localized_name: '平台订单', name: 'Platform Order').tap do |model|
+          platform_order = project.models.create!(code: 'platform_order', name: 'Platform Order').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
             model.regular_properties.tap do |regular_properties_association|
               regular_properties_association.create!(code: 'number',
                 name: 'Number',
-                localized_name: '订单编号',
                 type: :string,
                 sculpture: true,
                 common_validation_attributes: {
@@ -277,7 +300,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'daily_number',
                 name: 'Daily Number',
-                localized_name: '日单编号',
                 type: :integer,
                 sculpture: false,
                 common_validation_attributes: {
@@ -290,7 +312,6 @@ namespace :database do
               end
               model.enumeration_properties.create!(code: 'payment_method',
                 name: 'Payment Method',
-                localized_name: '付款方式',
                 sculpture: false,
                 common_validation_attributes: {
                   empty_tolerance: :not_allowed,
@@ -299,13 +320,12 @@ namespace :database do
               ).tap do |property|
                 property.create_presence_validation!
                 property.elements.create!([
-                  { code: 'online', localized_name: '在线支付', name: 'Online' },
-                  { code: 'offline', localized_name: '货到付款', name: 'Offline' }
+                  { code: 'online', name: 'Online' },
+                  { code: 'offline', name: 'Offline' }
                 ])
               end
               regular_properties_association.create!(code: 'expect_time_of_arrival',
                 name: 'ETA',
-                localized_name: '期望送达',
                 type: :datetime,
                 sculpture: false,
                 common_validation_attributes: {
@@ -315,7 +335,6 @@ namespace :database do
               )
               regular_properties_association.create!(code: 'recipient_name',
                 name: 'Recipient Name',
-                localized_name: '收货人姓名',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -328,7 +347,6 @@ namespace :database do
               end
               model.enumeration_properties.create!(code: 'recipient_gender',
                 name: 'Recipient Gender',
-                localized_name: '收货人性别',
                 sculpture: false,
                 common_validation_attributes: {
                   empty_tolerance: :not_allowed,
@@ -337,14 +355,13 @@ namespace :database do
               ).tap do |property|
                 property.create_presence_validation!
                 property.elements.create!([
-                  { code: 'male', localized_name: '先生', name: 'Male' },
-                  { code: 'female', localized_name: '女士', name: 'Female' },
-                  { code: 'unknown', localized_name: '未知', name: 'Unknown' }
+                  { code: 'male', name: 'Male' },
+                  { code: 'female', name: 'Female' },
+                  { code: 'unknown', name: 'Unknown' }
                 ])
               end
               regular_properties_association.create!(code: 'recipient_mobile_number',
                 name: 'Recipient Mobile Number',
-                localized_name: '收货人手机号',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -357,7 +374,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'recipient_address',
                 name: 'Recipient Address',
-                localized_name: '收货人地址',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -370,7 +386,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'recipient_address_longitude',
                 name: 'Recipient Address Long',
-                localized_name: '收货人地址经度',
                 type: :decimal,
                 precision: 8,
                 scale: 6,
@@ -384,7 +399,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'recipient_address_latitude',
                 name: 'Recipient Address Lat',
-                localized_name: '收货人地址纬度',
                 type: :decimal,
                 precision: 9,
                 scale: 6,
@@ -398,7 +412,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'delivery_method_code',
                 name: 'Delivery Method Code',
-                localized_name: '配送方式编码',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -409,7 +422,6 @@ namespace :database do
                 property.create_length_validation!(maximum: 50)
               end
               regular_properties_association.create!(code: 'deliverer_name',
-                localized_name: '配送员姓名',
                 name: 'Deliverer Name',
                 type: :string,
                 sculpture: false,
@@ -422,7 +434,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'deliverer_mobile_number',
                 name: 'Deliverer Mobile Number',
-                localized_name: '配送员手机号',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -435,7 +446,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'invoice_title',
                 name: 'Invoice Title',
-                localized_name: '发票抬头',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -447,7 +457,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'unified_social_credit_code',
                 name: 'USCC',
-                localized_name: '税号',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -459,7 +468,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'new_user',
                 name: 'New?',
-                localized_name: '新用户',
                 type: :boolean,
                 sculpture: false,
                 common_validation_attributes: {
@@ -469,7 +477,6 @@ namespace :database do
               )
               regular_properties_association.create!(code: 'followed_user',
                 name: 'Followed?',
-                localized_name: '收藏用户',
                 type: :boolean,
                 sculpture: false,
                 common_validation_attributes: {
@@ -479,7 +486,6 @@ namespace :database do
               )
               regular_properties_association.create!(code: 'product_original_price',
                 name: 'Product Original Price',
-                localized_name: '商品价格',
                 type: :decimal,
                 precision: 10,
                 scale: 2,
@@ -493,7 +499,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'packing_charge',
                 name: 'Packing Charge',
-                localized_name: '餐盒费',
                 type: :decimal,
                 precision: 6,
                 scale: 2,
@@ -507,7 +512,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'delivery_fee',
                 name: 'Delivery Fee',
-                localized_name: '配送费',
                 type: :decimal,
                 precision: 6,
                 scale: 2,
@@ -521,7 +525,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'total_original_price',
                 name: 'Total Original Price',
-                localized_name: '原价',
                 type: :decimal,
                 precision: 8,
                 scale: 2,
@@ -535,7 +538,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'service_fee',
                 name: 'Service Fee',
-                localized_name: '服务费',
                 type: :decimal,
                 precision: 6,
                 scale: 2,
@@ -549,7 +551,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'revenue',
                 name: 'Revenue',
-                localized_name: '结算额',
                 type: :decimal,
                 precision: 6,
                 scale: 2,
@@ -563,7 +564,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'paid_at',
                 name: 'Paid Time',
-                localized_name: '付款时间',
                 type: :datetime,
                 sculpture: false,
                 common_validation_attributes: {
@@ -575,7 +575,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'remarks',
                 name: 'Remarks',
-                localized_name: '备注',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -591,12 +590,11 @@ namespace :database do
             cascade.redundancies.create!(model: brand)
             cascade.redundancies.create!(model: station)
           end
-          platform_review = project.models.create!(code: 'platform_review', localized_name: '平台评价', name: 'Platform Review').tap do |model|
+          platform_review = project.models.create!(code: 'platform_review', name: 'Platform Review').tap do |model|
             model.create_orm_loggable!(on_create: true, on_update: true, on_destroy: true, comment_required: false)
             model.regular_properties.tap do |regular_properties_association|
               regular_properties_association.create!(code: 'number',
                 name: 'Number',
-                localized_name: '评价编号',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -609,7 +607,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'order_number',
                 name: 'Order Number',
-                localized_name: '订单编号',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -621,7 +618,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'service_rating',
                 name: 'Service Rating',
-                localized_name: '商家评分',
                 type: :integer,
                 sculpture: false,
                 common_validation_attributes: {
@@ -634,7 +630,6 @@ namespace :database do
               end
               regular_properties_association.create!(code: 'content',
                 name: 'Content',
-                localized_name: '内容',
                 type: :string,
                 sculpture: false,
                 common_validation_attributes: {
@@ -646,16 +641,16 @@ namespace :database do
               end
             end
           end
-          Cascade.create!(source: platform,destination: platform_review, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing).tap do |cascade|
+          Cascade.create!(source: platform, destination: platform_review, type: :has_many, optional: false, action_when_owner_destroyed: :restrict_with_exception, action_when_child_destroyed: :nothing).tap do |cascade|
             cascade.redundancies.create!(model: brand)
             cascade.redundancies.create!(model: station)
           end
-          project.namespaces.create!(name: 'admin', module: 'administration', path: 'admin', theme: :boooya_default).tap do |namespace|
+          project.namespaces.create!(authenticator: Model.find_by(code: 'administrator'), name: 'admin', module: 'administration', path: 'admin', theme: :boooya_default).tap do |namespace|
             namespace.resourceful_controllers.create!(model: Model.find_by(code: 'station')).tap do |resourceful_controller|
-              resourceful_controller.retrieve_collections.create!(type: :regular, action_name: 'index')
+              resourceful_controller.retrieve_collections.create!(type: :regular, action_code: 'index')
               resourceful_controller.create_retrieve_element!(type: :regular)
               resourceful_controller.create_individual_creation!(type: :regular, confirmable: true)
-              resourceful_controller.individual_updations.create!(type: :regular, frontend_action_name: 'edit', backend_action_name: 'update', backend_action_method: :patch, confirmable: true)
+              resourceful_controller.create_individual_updation!(type: :regular, confirmable: true)
               resourceful_controller.create_individual_deletion!(type: :regular, confirmable: true)
             end
           end

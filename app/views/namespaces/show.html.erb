@@ -1,6 +1,6 @@
 <div class="app-heading app-heading-bordered app-heading-page">
   <div class="title">
-    <h1>Models</h1>
+    <h1>Namespaces</h1>
     <p><%= @page_metadata %></p>
   </div>
 </div>
@@ -14,6 +14,12 @@
         </div>
       </div>
       <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'namespace.authenticator' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @namespace.authenticator.name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
         <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'namespace.name' %></label>
           <div class="col-sm-6">
@@ -45,4 +51,37 @@
       </div>
     </div>
   </form>
+  <div class="block block-condensed">
+    <div class="app-heading">
+      <div class="title">
+        <h2><%= arm_t('navigation') %> List</h2>
+      </div>
+    </div>
+    <% if @namespace.navigations.present? %>
+    <div class="table-responsive">
+      <table class="table table-head-light margin-bottom-0">
+        <thead>
+          <tr>
+            <th><%= ara_t 'navigation.name' %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @namespace.navigations.each do |navigation| %>
+          <tr>
+            <td><%= navigation.name %></td>
+            <td class="actions">
+              <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_navigation_path(navigation), class: 'btn btn-default btn-icon' %>
+              <%= link_to raw('<i class="fa fa-times"></i>'), navigation, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-icon' %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% end %>
+    <div class="block-footer">
+      <%= link_to 'New', new_namespace_navigation_path(@namespace), class: 'btn btn-default' %>
+    </div>
+  </div>
 </div>

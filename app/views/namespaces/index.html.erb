@@ -1,6 +1,6 @@
 <div class="app-heading app-heading-bordered app-heading-page">
   <div class="title">
-    <h1>Models</h1>
+    <h1>Namespaces</h1>
     <p><%= @page_metadata %></p>
   </div>
   <div class="heading-elements">
@@ -19,6 +19,7 @@
       <table class="table table-head-light margin-bottom-0">
         <thead>
           <tr>
+            <th><%= ara_t 'namespace.authenticator' %></th>
             <th><%= ara_t 'namespace.name' %></th>
             <th><%= ara_t 'namespace.module' %></th>
             <th><%= ara_t 'namespace.path' %></th>
@@ -29,6 +30,7 @@
         <tbody>
           <% @namespaces.each do |namespace| %>
           <tr>
+            <td><%= namespace.authenticator.name %></td>
             <td><%= namespace.name %></td>
             <td><%= namespace.module %></td>
             <td><%= namespace.path %></td>

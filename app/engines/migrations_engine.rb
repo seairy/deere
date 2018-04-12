@@ -3,14 +3,15 @@ class MigrationsEngine < ApplicationEngine
   def compile
     @project.models.each do |model|
       @project.source_codes.create!(prefix: ["db", "migrate"],
-        file_name: "#{model.created_at.strftime('%Y%m%d%H%M%S')}_create_#{model.code.pluralize}.rb",
+        file_name: "#{model.created_at.strftime('%Y%m%d%H%M%S')}_create_#{model.code.pluralize}",
+        extension: "rb",
         content: content_for(model))
     end
   end
 
   protected
     def content_for model
-      "class Create#{model.code.camelize} < ActiveRecord::Migration[5.1]\n" +
+      "class Create#{model.code.pluralize.camelize} < ActiveRecord::Migration[5.1]\n" +
       "def change\n" +
       "create_table :#{model.code.pluralize} do |t|\n" +
       columns(model) + "\n" +
@@ -29,7 +30,8 @@ class MigrationsEngine < ApplicationEngine
         end
         if model.authenticatable.present?
           result << "t.string :#{model.authenticatable.account_name}, limit: 32, null: false"
-          result << "t.string :hashed_password, limit: 32, null: false"
+          result << "t.string :salt, limit: 24, null: false"
+          result << "t.string :hashed_password, limit: 64, null: false"
         end
         model.properties.each do |property|
           case property

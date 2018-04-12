@@ -26,6 +26,6 @@ class StateMachineEvent < ApplicationRecord
 
     def set_sources
       sources.destroy_all
-      state_machine_state_ids_for_source.delete_if(&:blank?).each{|state_machine_state_id| sources.create!(state_machine_state_id: state_machine_state_id)}
+      state_machine_state_ids_for_source&.delete_if(&:blank?)&.each{|state_machine_state_id| sources.create!(state_machine_state_id: state_machine_state_id)}
     end
 end

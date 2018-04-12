@@ -8,7 +8,8 @@
   <div class="block block-condensed">
     <div class="app-heading app-heading-small">
       <div class="title">
-        <h2 class="margin-bottom-0"><%= @source_code.file_name %></h2>
+        <h2 class="margin-bottom-0"><%= @source_code.file_name %>.<%= @source_code.extension %></h2>
+        <p><%= @source_code.prefix.join(File::SEPARATOR) %></p>
       </div>
     </div>
     <div class="block-divider-text margin-top-0 margin-bottom-0">
@@ -34,7 +35,7 @@
         enterMode: "keep",
         tabMode: "shift"                                                
       });
-      editor.setSize('100%','500px');
+      editor.setSize('100%','450px');
     });
   </script>
 <% end %>

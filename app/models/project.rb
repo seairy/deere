@@ -1,4 +1,6 @@
 class Project < ApplicationRecord
+  extend Enumerize
+  enumerize :primary_language, in: %w(en zh_CN), predicates: { prefix: true }, scope: true
   has_many :models, dependent: :restrict_with_exception
   has_many :namespaces, dependent: :restrict_with_exception
   has_many :resourceful_controllers, through: :namespaces
@@ -8,7 +10,11 @@ class Project < ApplicationRecord
 
   def compile
     source_codes.destroy_all
-    ModelsEngine.new(self).compile
+    ControllersEngine.new(self).compile
+    I18nEngine.new(self).compile
     MigrationsEngine.new(self).compile
+    ModelsEngine.new(self).compile
+    RoutesEngine.new(self).compile
+    ViewsEngine.new(self).compile
   end
 end

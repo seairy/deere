@@ -83,7 +83,9 @@ Rails.application.routes.draw do
   # ******************************************************** #
 
   # ******************************************************** #
-  resources :namespaces
+  resources :namespaces do
+    resources :navigations, only: %w(new create)
+  end
   resources :resourceful_controllers do
     resources :retrieve_collections, only: %w(new create)
     resources :retrieve_elements, only: %w(new create)
@@ -105,6 +107,7 @@ Rails.application.routes.draw do
   resources :individual_creations, only: %w(show destroy)
   resources :individual_updations, only: %w(show destroy)
   resources :individual_deletions, only: %w(show destroy)
+  resources :navigations, only: %w(edit update destroy)
   # ******************************************************** #
 
   # ******************************************************** #

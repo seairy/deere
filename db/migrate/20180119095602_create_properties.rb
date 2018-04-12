@@ -5,7 +5,6 @@ class CreateProperties < ActiveRecord::Migration[5.1]
       t.references :model, null: false
       t.string :code, limit: 100, null: false
       t.string :name, limit: 100, null: false
-      t.string :localized_name, limit: 100, null: false
       t.string :type, limit: 50, null: false
       t.boolean :sculpture, null: false
       t.integer :precision, limit: 1

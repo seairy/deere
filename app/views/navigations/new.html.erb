@@ -1,27 +1,27 @@
 <div class="app-heading app-heading-bordered app-heading-page">
   <div class="title">
-    <h1>Models</h1>
+    <h1>R Controllers</h1>
     <p><%= @page_metadata %></p>
   </div>
 </div>
 <div class="container">
-  <%= render "common/error_messages", target: @state_machine_state %>
-  <%= form_for [@state_machine, @state_machine_state], html: { class: 'form-horizontal' } do |f| %>
+  <%= render "common/error_messages", target: @navigation %>
+  <%= form_for [@namespace, @navigation], html: { class: 'form-horizontal' } do |f| %>
     <div class="block block-condensed">
       <div class="app-heading app-heading-small">
         <div class="title">
-          <h2>New <%= arm_t('state_machine_state') %></h2>
+          <h2>New <%= arm_t('navigation') %></h2>
         </div>
       </div>
       <div class="block-content">
         <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'state_machine_state.code' %> <span class="required">*</span></label>
+          <label class="col-sm-3 control-label"><%= arm_t 'namespace' %> <%= ara_t 'namespace.name' %></label>
           <div class="col-sm-6">
-            <%= f.text_field :code, class: 'form-control' %>
+            <%= text_field_tag nil, @namespace.name, readonly: true, class: 'form-control' %>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'state_machine_state.name' %> <span class="required">*</span></label>
+          <label class="col-sm-3 control-label"><%= ara_t 'navigation.name' %> <span class="required">*</span></label>
           <div class="col-sm-6">
             <%= f.text_field :name, class: 'form-control' %>
           </div>
@@ -29,7 +29,7 @@
       </div>
       <div class="block-footer">
         <%= f.submit 'Create', class: 'btn btn-primary' %>
-        <%= link_to 'Return', @state_machine, class: 'pull-right btn btn-default' %>
+        <%= link_to 'Return', @namespace, class: 'pull-right btn btn-default' %>
       </div>
     </div>
   <% end %>

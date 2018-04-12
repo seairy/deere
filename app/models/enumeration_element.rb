@@ -2,7 +2,6 @@ class EnumerationElement < ApplicationRecord
   belongs_to :enumeration_property
   before_create :set_position
   validates :code, presence: true, length: { maximum: 100 }, uniqueness: { scope: :enumeration_property }, code: true
-  validates :localized_name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :enumeration_property }
   validates :name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :enumeration_property }
 
   def self.sort sequence

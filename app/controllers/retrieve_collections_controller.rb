@@ -6,7 +6,7 @@ class RetrieveCollectionsController < ApplicationController
   end
 
   def new
-    @retrieve_collection = @resourceful_controller.retrieve_collections.new(action_name: "index")
+    @retrieve_collection = @resourceful_controller.retrieve_collections.new(action_code: "index")
   end
 
   def edit

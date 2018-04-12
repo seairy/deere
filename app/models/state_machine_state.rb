@@ -5,7 +5,6 @@ class StateMachineState < ApplicationRecord
   before_create :set_initial, :set_position
   before_update :set_initial
   validates :code, presence: true, length: { maximum: 100 }, uniqueness: { scope: :state_machine }, code: true
-  validates :localized_name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :state_machine }
   validates :name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :state_machine }
 
   def self.sort sequence

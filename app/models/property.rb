@@ -21,7 +21,6 @@ class Property < ApplicationRecord
   before_create :set_position
   scope :sorted, -> { order(:position) }
   validates :code, presence: true, length: { maximum: 100 }, uniqueness: { scope: :model }, code: true
-  validates :localized_name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :model }
   validates :name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :model }
   validates :sculpture, inclusion: { in: [true, false] }
   validates :common_validation, presence: true

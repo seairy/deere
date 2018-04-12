@@ -6,14 +6,14 @@ class IndividualUpdationsController < ApplicationController
   end
 
   def new
-    @individual_updation = @resourceful_controller.individual_updations.new(frontend_action_name: "edit", backend_action_name: "update", backend_action_method: "patch", confirmable: false)
+    @individual_updation = @resourceful_controller.bulid_individual_updation(frontend_action_code: "edit", backend_action_code: "update", backend_action_method: "patch", confirmable: false)
   end
 
   def edit
   end
 
   def create
-    @individual_updation = @resourceful_controller.individual_updations.new(individual_updation_params)
+    @individual_updation = @resourceful_controller.bulid_individual_updation(individual_updation_params)
     if @individual_updation.save
       redirect_to @individual_updation, notice: notice_sentence
     else

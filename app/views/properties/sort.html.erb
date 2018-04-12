@@ -16,7 +16,7 @@
         <ol class="dd-list">
           <% @model.properties.order(:position).each do |property| %>
           <li class="dd-item" data-id="<%= property.id %>">
-            <div class="dd-handle"><i class="fa fa-circle text-danger margin-right-20"></i> <%= property.localized_name %> / <%= property.name %></div>
+            <div class="dd-handle"><i class="fa fa-circle text-danger margin-right-20"></i> <%= property.name %></div>
           </li>
           <% end %>
         </ol>

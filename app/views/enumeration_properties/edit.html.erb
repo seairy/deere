@@ -34,12 +34,6 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-3 control-label"><%= ara_t 'property.localized_name' %> <span class="required">*</span></label>
-          <div class="col-sm-6">
-            <%= f.text_field :localized_name, class: 'form-control' %>
-          </div>
-        </div>
-        <div class="form-group">
           <label class="col-sm-3 control-label"><%= ara_t 'property.name' %> <span class="required">*</span></label>
           <div class="col-sm-6">
             <%= f.text_field :name, class: 'form-control' %>
@@ -74,7 +68,7 @@
             </div>
             <div class="dd-content dd-content-extra">
               <%= enumeration_element.code %>
-              ( <%= enumeration_element.localized_name %> / <%= enumeration_element.name %> )
+              ( <%= enumeration_element.name %> )
               <%= link_to '[Destroy]', enumeration_element, method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-muted pull-right' %>
               <%= link_to '[Edit]', edit_enumeration_element_path(enumeration_element), class: 'text-muted pull-right margin-right-20' %>
             </div>
