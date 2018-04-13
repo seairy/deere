@@ -107,7 +107,10 @@ Rails.application.routes.draw do
   resources :individual_creations, only: %w(show destroy)
   resources :individual_updations, only: %w(show destroy)
   resources :individual_deletions, only: %w(show destroy)
-  resources :navigations, only: %w(edit update destroy)
+  resources :navigations, only: %w(show edit update destroy) do
+    resources :navigation_elements, only: %w(new create)
+  end
+  resources :navigation_elements, only: %w(edit update destroy)
   # ******************************************************** #
 
   # ******************************************************** #

@@ -1,0 +1,90 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>R Controllers</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= styled_flash %>
+  <form class="form-horizontal">
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>View <%= arm_t('navigation') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= arm_t('namespace') %> <%= ara_t 'namespace.name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @navigation.namespace.name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'namespace.name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @navigation.name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= link_to 'Edit', edit_navigation_path(@navigation), class: 'btn btn-default' %>
+        <%= link_to 'Destroy', @navigation, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+        <%= link_to 'Return', @navigation.namespace, class: 'btn btn-default pull-right' %>
+      </div>
+    </div>
+  </form>
+  <div class="block block-condensed">
+    <div class="app-heading">
+      <div class="title">
+        <h2><%= arm_t('navigation_element') %> List</h2>
+      </div>
+    </div>
+    <% if @navigation.elements.present? %>
+    <div class="table-responsive">
+      <table class="table table-head-light margin-bottom-0">
+        <thead>
+          <tr>
+            <th><%= ara_t 'navigation_element.name' %></th>
+            <th><%= ara_t 'navigation_element.type' %></th>
+            <th><%= ara_t 'navigation_element.navigable' %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @navigation.elements.each do |navigation_element| %>
+          <tr>
+            <td><%= navigation_element.name %></td>
+            <td><%= navigation_element.navigable.model_name.human %></td>
+            <td>
+              <% case navigation_element.navigable %>
+              <% when RetrieveCollection %>
+              <%= navigation_element.navigable.model.name %>#<%= navigation_element.navigable.action_code %>
+              <% when IndividualCreation %>
+              <%= navigation_element.navigable.model.name %>#new
+              <% end %>
+            </td>
+            <td class="actions">
+              <%= link_to raw('<i class="fa fa-pencil"></i>'), edit_navigation_element_path(navigation_element), class: 'btn btn-default btn-icon' %>
+              <%= link_to raw('<i class="fa fa-times"></i>'), navigation_element, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-icon' %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% end %>
+    <div class="block-footer">
+      <div class="btn-group dropup">
+        <button type="button" class="btn btn-default">New</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Retrieve Collection', new_navigation_navigation_element_path(@navigation, type: "RetrieveCollection") %></li>
+          <li><%= link_to 'Individual Creation', new_navigation_navigation_element_path(@navigation, type: "IndividualCreation") %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

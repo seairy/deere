@@ -16,7 +16,7 @@ class NavigationsController < ApplicationController
   def create
     @navigation = @namespace.navigations.new(navigation_params)
     if @navigation.save
-      redirect_to @namespace, notice: notice_sentence
+      redirect_to @navigation, notice: notice_sentence
     else
       render action: 'new'
     end
@@ -24,7 +24,7 @@ class NavigationsController < ApplicationController
   
   def update
     if @navigation.update(navigation_params)
-      redirect_to @navigation.namespace, notice: notice_sentence
+      redirect_to @navigation, notice: notice_sentence
     else
       render action: 'edit'
     end

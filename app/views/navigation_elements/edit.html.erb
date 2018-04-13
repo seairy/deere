@@ -1,0 +1,48 @@
+<div class="app-heading app-heading-bordered app-heading-page">
+  <div class="title">
+    <h1>Models</h1>
+    <p><%= @page_metadata %></p>
+  </div>
+</div>
+<div class="container">
+  <%= render "common/error_messages", target: @navigation_element %>
+  <%= form_for @navigation_element, html: { class: 'form-horizontal' } do |f| %>
+    <%= hidden_field_tag :type, params[:type] %>
+    <div class="block block-condensed">
+      <div class="app-heading app-heading-small">
+        <div class="title">
+          <h2>New <%= arm_t('regular_navigation_element') %></h2>
+        </div>
+      </div>
+      <div class="block-content">
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= arm_t 'navigation' %> <%= ara_t 'navigation.name' %></label>
+          <div class="col-sm-6">
+            <%= text_field_tag nil, @navigation_element.navigation.name, readonly: true, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'navigation_element.navigable' %></label>
+          <div class="col-sm-6">
+            <% case @navigation_element.navigable %>
+            <% when RetrieveCollection %>
+              <%= text_field_tag nil, "#{@navigation_element.navigable.model.name}##{@navigation_element.navigable.action_code}", readonly: true, class: 'form-control' %>
+            <% when IndividualCreation %>
+              <%= text_field_tag nil, "#{@navigation_element.navigable.model.name}#new", readonly: true, class: 'form-control' %>
+            <% end %>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label"><%= ara_t 'navigation_element.name' %> <span class="required">*</span></label>
+          <div class="col-sm-6">
+            <%= f.text_field :name, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="block-footer">
+        <%= f.submit 'Update', class: 'btn btn-primary' %>
+        <%= link_to 'Return', @navigation_element.navigation, class: 'pull-right btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>

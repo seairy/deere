@@ -3,6 +3,7 @@ class Navigation < ApplicationRecord
   has_many :elements, class_name: "NavigationElement", dependent: :destroy
   before_create :set_position
   validates :name, presence: true, length: { maximum: 100 }, uniqueness: { scope: :namespace }
+  validates :linear_icon, presence: true, length: { maximum: 25 }
 
   protected
     def set_position
