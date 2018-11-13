@@ -3,12 +3,20 @@ class I18nEngine < ApplicationEngine
     @project.source_codes.create!(prefix: ["config", "locales"],
       file_name: "#{@project.primary_language}",
       extension: "yml",
-      content: locale_code)
+      content: locale_file)
   end
 
   protected
-    def locale_code
-      [enumerizes, models, attributes].join("\n")
+    def locale_file
+      [template.read,
+        enumerizes,
+        models,
+        attributes
+      ].join("\n")
+    end
+
+    def template
+      File.open(File.join(Rails.root, "app", "templates", "locales", "#{@project.primary_language}.yml"))
     end
 
     def enumerizes
@@ -16,9 +24,10 @@ class I18nEngine < ApplicationEngine
         if (enumeration_properties = @project.models.map(&:enumeration_properties).compact.flatten).present?
           result << "  enumerize:"
           enumeration_properties.each do |enumeration_property|
-            result << "    #{enumeration_property.code}:"
+            result << "    #{enumeration_property.model.code}:"
+            result << "      #{enumeration_property.code}:"
             enumeration_property.elements.each do |enumeration_element|
-              result << "      #{enumeration_element.code}: #{enumeration_element.name}"
+              result << "        #{enumeration_element.code}: #{enumeration_element.name}"
             end
           end
         end

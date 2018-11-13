@@ -17,6 +17,7 @@ class RoutesEngine < ApplicationEngine
             result << "resources :#{resourceful_controller.model.code.pluralize}"
           end
           result << "end"
+          result << ""
           result << "end"
         end
       end.join("\n")

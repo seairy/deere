@@ -64,13 +64,13 @@ class ControllersEngine < ApplicationEngine
             redirect_to #{namespace.name}_root_path
           end
         rescue AccountDoesNotExist
-          redirect_to #{namespace.name}_sign_in_path, alert: t(\"error_messages.account_does_not_exist\")
+          redirect_to #{namespace.name}_sign_in_path, alert: t(\"errors.messages.account_does_not_exist\")
         rescue IncorrectPassword
-          redirect_to #{namespace.name}_sign_in_path(#{namespace.authenticator.authenticatable.account_name}: params[:#{namespace.authenticator.authenticatable.account_name}]), alert: t(\"error_messages.incorrect_password\")
+          redirect_to #{namespace.name}_sign_in_path(#{namespace.authenticator.authenticatable.account_name}: params[:#{namespace.authenticator.authenticatable.account_name}]), alert: t(\"errors.messages.incorrect_password\")
         end
 
         def destroy
-          session[\"#{namespace.authenticator.code}_id\"] = nil
+          session[\"#{namespace.authenticator.code}\"] = nil
           redirect_to sign_in_path
         end
       end"
@@ -82,7 +82,8 @@ class ControllersEngine < ApplicationEngine
         actions(resourceful_controller),
         "protected",
         parameters(resourceful_controller),
-        finders(resourceful_controller)].join("\n") + "\n" +
+        finders(resourceful_controller),
+        filters(resourceful_controller)].join("\n") + "\n" +
       "end"
     end
 
@@ -98,11 +99,15 @@ class ControllersEngine < ApplicationEngine
       [].tap do |result|
         resourceful_controller.retrieve_collections.each do |retrieve_collection|
           result << "def #{retrieve_collection.action_code}"
-          statement = "@#{resourceful_controller.model.code.pluralize} = #{resourceful_controller.model.code.camelize}"
-          if (table_pagination = retrieve_collection.table.pagination).present?
-            statement << ".page(params[:page]).per_page(#{table_pagination.per_page})"
+          if retrieve_collection.table.filter.present?
+            statement = "@#{resourceful_controller.model.code.pluralize} = #{retrieve_collection.action_code}_filter"
           else
-            statement << ".all"
+            statement = "@#{resourceful_controller.model.code.pluralize} = #{resourceful_controller.model.code.camelize}"
+            if (table_pagination = retrieve_collection.table.pagination).present?
+              statement << ".page(params[:page]).per_page(#{table_pagination.per_page})"
+            else
+              statement << ".all"
+            end
           end
           result << statement
           result << "end"
@@ -169,6 +174,48 @@ class ControllersEngine < ApplicationEngine
         if resourceful_controller.retrieve_element.present? or resourceful_controller.individual_updation.present? or resourceful_controller.individual_deletion.present?
           result << "def find_#{resourceful_controller.model.code}"
           result << "@#{resourceful_controller.model.code} = #{resourceful_controller.model.code.camelize}.find(params[:id])"
+          result << "end"
+        end
+      end.join("\n")
+    end
+
+    def filters resourceful_controller
+      [].tap do |result|
+        resourceful_controller.retrieve_collections.select{ |retrieve_collection| retrieve_collection.table.filter.present? }.each do |retrieve_collection|
+          exist_keyword_filter = false
+          result << "def #{retrieve_collection.action_code}_filter"
+          result << "scope = #{resourceful_controller.model.name.camelize}"
+          retrieve_collection.table.filter.scopes.each do |filter_scope|
+            if filter_scope.property.model == resourceful_controller.model
+              case filter_scope.property
+              when RegularProperty
+                case filter_scope.property.type
+                when "string", "text"
+                  unless exist_keyword_filter
+                    result << "scope = scope.contain_keyword(params[:keyword]) if params[:keyword].present?"
+                    exist_keyword_filter = true
+                  end
+                when "integer", "float", "decimal"
+                  result << "scope = scope.#{filter_scope.property.code}_greater_than(params[:minimum_#{filter_scope.property.code}]) if params[:minimum_#{filter_scope.property.code}].present?"
+                  result << "scope = scope.#{filter_scope.property.code}_less_than(params[:maximum_#{filter_scope.property.code}]) if params[:maximum_#{filter_scope.property.code}].present?"
+                when "datetime", "date", "time"
+                  result << "scope = scope.#{filter_scope.property.code}_after(params[:start_#{filter_scope.property.code}]) if params[:start_#{filter_scope.property.code}].present?"
+                  result << "scope = scope.#{filter_scope.property.code}_before(params[:end_#{filter_scope.property.code}]) if params[:end_#{filter_scope.property.code}].present?"
+                when "boolean"
+                  result << "scope = scope.of_#{filter_scope.property.code}(params[:#{filter_scope.property.code}]) if params[:#{filter_scope.property.code}].present?"
+                end
+              when EnumerationProperty
+                result << "scope = scope.of_#{filter_scope.property.code}(params[:#{filter_scope.property.code}]) if params[:#{filter_scope.property.code}].present?"
+              end
+            else
+              result << "scope = scope.of_#{filter_scope.property.model.code}(params[:#{filter_scope.property.model.code}_id]) if params[:#{filter_scope.property.model.code}_id].present?"
+            end
+          end
+          if (table_pagination = retrieve_collection.table.pagination).present?
+            result << "scope.page(params[:page]).per_page(#{table_pagination.per_page})"
+          else
+            result << "scope.all"
+          end
           result << "end"
         end
       end.join("\n")

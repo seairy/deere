@@ -17,7 +17,7 @@
       <%= number_to_human_size(@source_code.content.length) %> |
       <%= @source_code.content.count("\n") + 1 %> lines
     </div>
-    <%= text_area_tag :source_code_content, @source_code.content %>
+    <%= text_area_tag :source_code_content, @source_code.content, style: "height: 450px;" %>
     <div class="block-footer">
       <%= link_to 'Return', source_codes_path, class: 'btn btn-default' %>
     </div>

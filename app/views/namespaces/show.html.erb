@@ -63,6 +63,7 @@
         <thead>
           <tr>
             <th><%= ara_t 'navigation.name' %></th>
+            <th><%= ara_t 'navigation.elements' %></th>
             <th></th>
           </tr>
         </thead>
@@ -70,6 +71,15 @@
           <% @namespace.navigations.each do |navigation| %>
           <tr>
             <td><%= navigation.name %></td>
+            <td>
+              <% navigation.elements.each do |navigation_element| %>
+              <% tooltip_title = case navigation_element.navigable %>
+              <% when RetrieveCollection then "#{navigation_element.navigable.model.name}##{navigation_element.navigable.action_code}" %>
+              <% when IndividualCreation then "#{navigation_element.navigable.model.name}#new" %>
+              <% end %>
+              <label class="label label-default margin-right-5" data-toggle="tooltip" data-placement="top" title="<%= tooltip_title %>"><%= navigation_element.name %></label>
+              <% end %>
+            </td>
             <td class="actions">
               <%= link_to raw('<i class="fa fa-file-text-o"></i>'), navigation, class: 'btn btn-default btn-icon' %>
             </td>
